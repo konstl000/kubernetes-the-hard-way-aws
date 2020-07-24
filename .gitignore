@@ -1,0 +1,10 @@
+.terraform/
+plan
+*.tfstate*
+rsa/
+bootstrap/*.pem
+bootstrap/*.kubeconfig
+bootstrap/*.json
+bootstrap/*.csr
+bootstrap/encryption-config.yaml
+bootstrap/protocol.txt

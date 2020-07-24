@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testapp
+  labels:
+    app: testapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: testapp
+  template:
+    metadata:
+      labels:
+        app: testapp
+    spec:
+      containers:
+      - name: testapp
+        image: ktroshin/requesttester
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+

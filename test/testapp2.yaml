@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: test123
+  name: test123
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test123
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: test123
+    spec:
+      containers:
+      - image: ktroshin/requesttester
+        name: requesttester
+        ports:
+        - containerPort: 80
+
