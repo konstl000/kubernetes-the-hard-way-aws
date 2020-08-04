@@ -6,8 +6,13 @@ Albeit the most of the stuff is taken from Kelsey Hightower's repo, this adaptat
 Assumes https://github.com/konstl000/terraform-modules to be in ../shared/
 Assumes that you have a linux workstation or a mac with GNU sed
 
+## Prerequisites
+ - [aws cli](https://aws.amazon.com/cli/?nc1=h_ls)
+ - [jq](https://stedolan.github.io/jq/download/)
+ - [terraform](https://www.terraform.io/downloads.html)
+ - [cfssl](https://github.com/cloudflare/cfssl/releases)
+ - [cfssljson](https://github.com/cloudflare/cfssl/releases)
 ## Deployment
- - Install terraform
  - Install kubectl 1.18 (https://storage.googleapis.com/kubernetes-release/release/v1.18.6/bin/linux/amd64/kubectl)
  - Install cfssl (https://github.com/cloudflare/cfssl/releases)
  - Install cfssljson (https://github.com/cloudflare/cfssl/releases)
