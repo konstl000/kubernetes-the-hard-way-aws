@@ -13,6 +13,7 @@ Assumes that you have a linux workstation or a mac with GNU sed
  - [cfssl](https://github.com/cloudflare/cfssl/releases)
  - [cfssljson](https://github.com/cloudflare/cfssl/releases)
 ## Deployment
+ - Generate an SSH key pair and store it as rsa/k8s.pem and rsa/k8s.pem.pub, respectively or use ./init.sh
  - Install kubectl 1.18 (https://storage.googleapis.com/kubernetes-release/release/v1.18.6/bin/linux/amd64/kubectl)
  - Install cfssl (https://github.com/cloudflare/cfssl/releases)
  - Install cfssljson (https://github.com/cloudflare/cfssl/releases)
