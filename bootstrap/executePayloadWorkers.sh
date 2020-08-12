@@ -84,7 +84,7 @@ function preparePayload(){
     echo 'mkdir $name'
     echo "echo '$(echo "$content" | base64)' | base64 -d > \$name/$(echo "$1" | jq -r '.script_name')"
     echo "chmod +x \$name/$(echo "$1" | jq -r '.script_name')"
-    echo "$sudo./\$name/$(echo "$1" | jq -r '.script_name') >> ./\$name/exec.log 2>> ./\$name/exec.log &"
+    echo "./\$name/$(echo "$1" | jq -r '.script_name') >> ./\$name/exec.log 2>> ./\$name/exec.log &"
   fi
 }
 function getScriptName(){

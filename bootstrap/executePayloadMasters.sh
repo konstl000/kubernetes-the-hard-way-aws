@@ -84,7 +84,7 @@ function preparePayload(){
     echo 'mkdir $name'
     echo "echo '$(echo "$content" | base64)' | base64 -d > \$name/$(echo "$1" | jq -r '.script_name')"
     echo "chmod +x \$name/$(echo "$1" | jq -r '.script_name')"
-    echo "$sudo./\$name/$(echo "$1" | jq -r '.script_name') >> ./\$name/exec.log 2>> ./\$name/exec.log &"
+    echo "./\$name/$(echo "$1" | jq -r '.script_name') >> ./\$name/exec.log 2>> ./\$name/exec.log &"
   fi
 }
 function getScriptName(){
@@ -97,6 +97,13 @@ for index in 1 2 3; do
     connectAndExecute "$(preparePayload $(echo "{\"payload\":\"${filename}\"}"))" "$masters" "$index"
   done
   for filename in kube_master.sh
+  do
+    HOSTNAME=$(echo "master-$index")
+    POD_CIDR="10.200.0.0/16"
+    getScriptName
+    connectAndExecute "$(preparePayload $(echo "{\"payload\":\"${filename}\",\"background\":true,\"script_name\":\"${SCRIPT_NAME}\"}"))" "$masters" "$index" 1
+  done
+  for filename in crictl.sh
   do
     connectAndExecute "$(preparePayload $(echo "{\"payload\":\"${filename}\"}"))" "$masters" "$index"
   done

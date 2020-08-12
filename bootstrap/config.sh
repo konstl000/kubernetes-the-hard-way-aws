@@ -37,6 +37,21 @@ function getWorkerConfigs(){
       --user=system:node:$(getPrivateDnsName "${workers}" ${index}) \
       --kubeconfig=worker-${index}.kubeconfig
     kubectl config use-context default --kubeconfig=worker-${index}.kubeconfig
+    kubectl config set-cluster kubernetes-the-hard-way \
+      --certificate-authority=ca.pem \
+      --embed-certs=true \
+      --server=https://${KUBERNETES_PUBLIC_ADDRESS} \
+      --kubeconfig=master-${index}.kubeconfig
+    kubectl config set-credentials system:node:$(getPrivateDnsName "${masters}" ${index}) \
+      --client-certificate=master-${index}.pem \
+      --client-key=master-${index}-key.pem \
+      --embed-certs=true \
+      --kubeconfig=master-${index}.kubeconfig
+    kubectl config set-context default \
+      --cluster=kubernetes-the-hard-way \
+      --user=system:node:$(getPrivateDnsName "${masters}" ${index}) \
+      --kubeconfig=master-${index}.kubeconfig
+    kubectl config use-context default --kubeconfig=master-${index}.kubeconfig
   done
 }
 function getKubeProxyConfig(){

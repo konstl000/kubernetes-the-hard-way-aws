@@ -110,6 +110,31 @@ cfssl gencert \
   -hostname=$(getHostName "${workers}" ${index}),$(getPrivateDnsName "${workers}" ${index}),$(getPublicIp "${workers}" ${index}),$(getPrivateIp "${workers}" ${index}) \
   -profile=kubernetes \
   worker-${index}-csr.json | cfssljson -bare worker-${index}
+cat > master-${index}-csr.json <<EOF
+{
+  "CN": "system:node:$(getPrivateDnsName "${masters}" ${index})",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "system:nodes",
+      "OU": "Kubernetes The Hard Way",
+      "ST": "Oregon"
+    }
+  ]
+}
+EOF
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -hostname=$(getHostName "${masters}" ${index}),$(getPrivateDnsName "${masters}" ${index}),$(getPublicIp "${masters}" ${index}),$(getPrivateIp "${masters}" ${index}) \
+  -profile=kubernetes \
+  master-${index}-csr.json | cfssljson -bare master-${index}
 done
 
 cat > kube-controller-manager-csr.json <<EOF

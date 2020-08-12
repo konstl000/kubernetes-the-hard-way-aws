@@ -10,4 +10,6 @@ pushd $wdir
 ./access.sh
 ./executePayloadWorkers.sh
 ./dns.sh
+./labelMasters.sh
+./nginx.sh
 popd

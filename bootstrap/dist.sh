@@ -16,7 +16,7 @@ for index in 1 2 3; do
   do
     copyToInstance "${filename}" "$workers" "$index" /home/ubuntu/
   done
-  for filename in ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig encryption-config.yaml
+  for filename in ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig encryption-config.yaml kube-proxy.kubeconfig master-${index}-key.pem master-${index}.pem master-${index}.kubeconfig
   do
     copyToInstance "${filename}" "$masters" "$index" /home/ubuntu/
   done
