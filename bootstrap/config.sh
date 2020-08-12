@@ -22,6 +22,7 @@ workers=$(getInstancesByTag k8snode)
 KUBERNETES_PUBLIC_ADDRESS=$(getLbDNS)
 function getWorkerConfigs(){
   for index in 1 2 3; do
+    rm -f worker-${index}.kubeconfig
     kubectl config set-cluster kubernetes-the-hard-way \
       --certificate-authority=ca.pem \
       --embed-certs=true \
@@ -37,6 +38,7 @@ function getWorkerConfigs(){
       --user=system:node:$(getPrivateDnsName "${workers}" ${index}) \
       --kubeconfig=worker-${index}.kubeconfig
     kubectl config use-context default --kubeconfig=worker-${index}.kubeconfig
+    rm -f master-${index}.kubeconfig
     kubectl config set-cluster kubernetes-the-hard-way \
       --certificate-authority=ca.pem \
       --embed-certs=true \

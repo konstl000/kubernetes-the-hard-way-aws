@@ -21,6 +21,6 @@ module "vpc" {
         2 = "10.200.12.0/24"
   }
   private2public = true
-  secondary_cidrs = ["10.32.0.0/24"]
+  secondary_cidrs = ["10.32.0.0/16"]
 }
 
