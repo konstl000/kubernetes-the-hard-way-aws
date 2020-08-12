@@ -53,7 +53,6 @@ sudo systemctl enable docker
 sudo usermod -a -G docker ubuntu
 }
 function prepareKubelet(){
-
   sudo mv ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
   sudo mv ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
   sudo mv ca.pem /var/lib/kubernetes/
