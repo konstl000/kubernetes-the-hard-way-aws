@@ -10,7 +10,7 @@ sudo apt-get update
 for util in kubelet kube-proxy kubectl
 do
   echo "getting $util ..."
-  curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.6/bin/linux/amd64/$util
+  curl -LO https://storage.googleapis.com/kubernetes-release/release/${K8S_VERSION}/bin/linux/amd64/$util
   chmod +x $util
   mv $util /usr/local/bin/
 done
