@@ -1,0 +1,23 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: ((aws_account_id)).dkr.ecr.eu-central-1.amazonaws.com/ccjobv_ubuntu
+    tag: latest
+inputs:
+  - name: repo
+  - name: shared
+run:
+  path: repo/ci/deploy/task.sh
+params:
+  ROLE_TO_ASSUME:
+  AWS_ACCESS_KEY_ID:
+  AWS_SECRET_ACCESS_KEY:
+  AWS_DEFAULT_REGION:
+  VAULT_ADDR:
+  ROOT_PASSWORD_PATH:
+  ROOT_USERNAME:
+  MAX_ATTEMPTS:
+  INTERVAL:
