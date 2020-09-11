@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 function fixDNS(){
   echo 'nameserver 8.8.8.8'>>/etc/resolv.conf
 }
@@ -9,6 +10,7 @@ function writeKubeconfig(){
   echo -e "${ADMIN_KEY}">/root/admin-key.pem
 }
 function main(){
+  kubectl get svc -n ingress-nginx
   pushd repo/test
   ./ingress.sh
   popd
