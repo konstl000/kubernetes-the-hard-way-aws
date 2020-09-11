@@ -6,7 +6,24 @@ function getInstanceId(){
  echo "$1" | sed -n "$2p" | jq -r '.InstanceId' 
 }
 function copyToInstance(){
-  rsync -rv -e "ssh -i ../rsa/k8s.pem -o StrictHostKeyChecking=no" "$1" 'ubuntu@'"$(getInstanceId "$2" "$3")"':'"$4"
+  cnt=0
+  while true
+  do
+    rsync -rv -e "ssh -i ../rsa/k8s.pem -o StrictHostKeyChecking=no" "$1" 'ubuntu@'"$(getInstanceId "$2" "$3")"':'"$4"
+    if [[ $? == 0 ]]
+    then
+        break
+    else
+        if [[ $cnt -gt 10 ]]
+        then
+          echo "rsync fails to often, bailing"
+          break
+        else
+          cnt=$(($cnt+1))
+          echo "$cnt attempt of rsync follows:"
+        fi
+    fi
+  done
 }
 masters=$(getInstancesByTag k8smaster)
 workers=$(getInstancesByTag k8snode)

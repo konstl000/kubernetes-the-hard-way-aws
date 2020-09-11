@@ -18,6 +18,9 @@ function assumeRole(){
   export AWS_EXPIRATION=$(echo $CREDENTIALS | jq -r '.Credentials.Expiration')
   aws sts get-caller-identity
 }
+function fixDNS(){
+  echo 'nameserver 8.8.8.8'>>/etc/resolv.conf
+}
 function runTerraform(){
   local cnt=0
   while [[ $cnt -lt ${MAX_ATTEMPTS} ]]
@@ -57,6 +60,8 @@ function main(){
   pushd ./repo
   runTerraform
   putFileToVault "${KUBE_PATH}/terraform_state" terraform.tfstate
+  putFileToVault "${KUBE_PATH}/ssh_private_key" rsa/k8s.pem
+  putFileToVault "${KUBE_PATH}/ssh_public_key" rsa/k8s.pem.pub
   ./bootstrap/deploy_all.sh
   fixKubeconfig>kube.config
   putFileToVault "${KUBE_PATH}/kubeconfig" kube.config
@@ -67,5 +72,6 @@ function main(){
 }
 vaultLogin
 assumeRole ${ROLE_TO_ASSUME}
+fixDNS
 main
 
