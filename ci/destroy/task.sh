@@ -25,14 +25,11 @@ function runTerraform(){
   local cnt=0
   while [[ $cnt -lt ${MAX_ATTEMPTS} ]]
   do
-    ./init.sh
     local res=0
     set +e
     terraform init
     res=$(($res+$?))
-    terraform plan -out plan
-    res=$(($res+$?))
-    terraform apply plan
+    terraform destroy -auto-approve
     res=$(($res+$?))
     set -e
     if [[ $res != 0 ]]
@@ -89,7 +86,7 @@ function checkK8S(){
     echo 1
   else
     writeKubeconfig
-    kubectl get no>/dev/null 2>/dev/null && echo 0 || echo 1    
+    kubectl get no>/dev/null 2>/dev/null && echo 0 || echo 1
   fi
 }
 function main(){
@@ -98,15 +95,19 @@ function main(){
   then
     pushd repo
     curl -L -o nginx.yaml https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/aws/deploy.yaml
-    kubectl delete -f nginx.yaml
+    #kubectl delete -f nginx.yaml
     TERRAFORM_STATE=$(getFileFromVault "${KUBE_PATH}/terraform_state")
     if [[ -z $TERRAFORM_STATE ]]
     then
       echo -e "${RED}Could not retrieve the terraform state, please fix it manually!${DEF}"
       exit 1
     else
-      echo -e "${TERRAFORM_STATE}">terraform.tfstate
-      terraform destroy -auto-approve
+      echo "${TERRAFORM_STATE}">terraform.tfstate
+      mkdir -p rsa
+      echo $(getFileFromVault "${KUBE_PATH}/ssh_private_key")>rsa/k8s.pem
+      chmod 600 rsa/k8s.pem
+      echo $(getFileFromVault "${KUBE_PATH}/ssh_public_key")>rsa/k8s.pem.pub
+      runTerraform
     fi
     popd
   else
