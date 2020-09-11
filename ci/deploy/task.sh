@@ -43,19 +43,29 @@ function runTerraform(){
     fi
   done
 }
-function updateToVault(){
-  vault login -no-print -method=ldap username=${ROOT_USER}  password="$(getKeyFromSSM "${ROOT_PASSWORD_PATH}")"
-  vault kv put /concourse/main/k8s-private-key value=@rsa/k8s.pem
-  vault kv put /concourse/main/admin-kubeconfig value@/root/.kube/config
+function vaultLogin(){
+  vault login -no-print -method=ldap username=${VAULT_USER}  password="${VAULT_PASSWORD}"
+}
+function putFileToVault(){
+  vault kv put /concourse/${TEAM}/"$1" value=@"$2"
+}
+function fixKubeconfig(){
+  local adminIndex=$(cat ~/.kube/config | yq -r '.users | to_entries[] | select(.value.name=="admin") | .key')
+  cat ~/.kube/config | yq -y '.users['"$adminIndex"'].user."client-certificate"="/root/admin.pem" | .users['"$adminIndex"'].user."client-key"="/root/admin-key.pem"'
 }
 function main(){
   pushd ./repo
   runTerraform
+  putFileToVault "${KUBE_PATH}/terraform_state" terraform.tfstate
   ./bootstrap/deploy_all.sh
-  updateToVault
+  fixKubeconfig>kube.config
+  putFileToVault "${KUBE_PATH}/kubeconfig" kube.config
+  putFileToVault "${KUBE_PATH}/admin_cert" bootstrap/admin.pem
+  putFileToVault "${KUBE_PATH}/admin_key" bootstrap/admin-key.pem
   popd
   echo -e "${GREEN}Env created successfully${DEF}"
 }
+vaultLogin
 assumeRole ${ROLE_TO_ASSUME}
 main
 
