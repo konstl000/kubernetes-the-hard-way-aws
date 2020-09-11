@@ -1,7 +1,11 @@
 #!/bin/bash
 function prepareAwsCni(){
   curl -LO https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/master/config/v1.6/aws-k8s-cni.yaml
-  sed -i 's/us-west-2/'$(aws configure get region)'/g' aws-k8s-cni.yaml
+  if [[ -z "$AWS_DEFAULT_REGION" ]]
+  then
+    AWS_DEFAULT_REGION=$(aws configure get region)
+  fi
+  sed -i 's/us-west-2/'"$AWS_DEFAULT_REGION"'/g' aws-k8s-cni.yaml
   kubectl apply -f aws-k8s-cni.yaml
 }
 function getInstancesByTag () {

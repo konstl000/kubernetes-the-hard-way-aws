@@ -52,11 +52,20 @@ function vaultLogin(){
 function putFileToVault(){
   vault kv put /concourse/${TEAM}/"$1" value=@"$2"
 }
+function getFileFromVault(){
+  vault kv get -format=json /concourse/${TEAM}/"$1" | jq -r '.data.value'
+}
 function fixKubeconfig(){
   local adminIndex=$(cat ~/.kube/config | yq -r '.users | to_entries[] | select(.value.name=="admin") | .key')
   cat ~/.kube/config | yq -y '.users['"$adminIndex"'].user."client-certificate"="/root/admin.pem" | .users['"$adminIndex"'].user."client-key"="/root/admin-key.pem"'
 }
-function main(){
+function writeKubeconfig(){
+  mkdir -p ~/.kube
+  echo -e "${KUBE_CONFIG}">~/.kube/config
+  echo -e "${ADMIN_CERT}">/root/admin.pem
+  echo -e "${ADMIN_KEY}">/root/admin-key.pem
+}
+function deployK8S(){
   pushd ./repo
   runTerraform
   putFileToVault "${KUBE_PATH}/terraform_state" terraform.tfstate
@@ -69,6 +78,30 @@ function main(){
   putFileToVault "${KUBE_PATH}/admin_key" bootstrap/admin-key.pem
   popd
   echo -e "${GREEN}Env created successfully${DEF}"
+}
+function checkK8S(){
+  set +e
+  KUBE_CONFIG=$(getFileFromVault "${KUBE_PATH}/kubeconfig")
+  ADMIN_CERT=$(getFileFromVault "${KUBE_PATH}/admin_cert")
+  ADMIN_KEY=$(getFileFromVault "${KUBE_PATH}/admin_key")
+  if [[ -z $KUBE_CONFIG ]] || [[ -z $ADMIN_CERT ]] || [[ -z $ADMIN_KEY ]]
+  then
+    echo 1
+  else
+    writeKubeconfig
+    kubectl get no>/dev/null 2>/dev/null && echo 0 || echo 1    
+  fi
+}
+function main(){
+  local k8sCheck=$(checkK8S)
+  if [[ "$k8sCheck" == 0 ]]
+  then
+    echo -e "${GREEN}Kubernetes is already up and running${DEF}"
+    kubectl get no
+  else
+    echo -e "${YELLOW}Deploying kubernetes${DEF}"
+    deployK8S
+  fi
 }
 vaultLogin
 assumeRole ${ROLE_TO_ASSUME}
