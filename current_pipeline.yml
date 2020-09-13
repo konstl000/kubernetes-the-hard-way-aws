@@ -1,0 +1,59 @@
+jobs:
+- name: deploy-k8s
+  plan:
+  - get: repo
+  - get: shared
+  - file: repo/ci/deploy/task.yml
+    params:
+      AWS_ACCESS_KEY_ID: ((concourse_id))
+      AWS_DEFAULT_REGION: eu-central-1
+      AWS_SECRET_ACCESS_KEY: ((concourse_secret))
+      INTERVAL: 60
+      KUBE_PATH: kubernetes-the-hard-way
+      MAX_ATTEMPTS: 20
+      ROLE_TO_ASSUME: arn:aws:iam::230913319278:role/TRUEDEVOPS_DEMO_Terraform
+      TEAM: bu4
+      VAULT_ADDR: https://concourse.((root_dn)):8200
+      VAULT_PASSWORD: ((vault_password))
+      VAULT_USER: ((vault_user))
+    task: deploy-k8s
+- name: deploy-testapp
+  plan:
+  - get: repo
+    passed:
+    - deploy-k8s
+  - file: repo/ci/testapp/task.yml
+    params:
+      ADMIN_CERT: ((kubernetes-the-hard-way/admin_cert))
+      ADMIN_KEY: ((kubernetes-the-hard-way/admin_key))
+      KUBE_CONFIG: ((kubernetes-the-hard-way/kubeconfig))
+    task: deploy-testapp
+- name: destroy-k8s
+  plan:
+  - get: repo
+  - get: shared
+  - file: repo/ci/destroy/task.yml
+    params:
+      AWS_ACCESS_KEY_ID: ((concourse_id))
+      AWS_DEFAULT_REGION: eu-central-1
+      AWS_SECRET_ACCESS_KEY: ((concourse_secret))
+      INTERVAL: 60
+      KUBE_PATH: kubernetes-the-hard-way
+      MAX_ATTEMPTS: 20
+      ROLE_TO_ASSUME: arn:aws:iam::230913319278:role/TRUEDEVOPS_DEMO_Terraform
+      TEAM: bu4
+      VAULT_ADDR: https://concourse.((root_dn)):8200
+      VAULT_PASSWORD: ((vault_password))
+      VAULT_USER: ((vault_user))
+    task: destroy-k8s
+resources:
+- name: repo
+  source:
+    branch: master
+    uri: https://github.com/konstl000/kubernetes-the-hard-way-aws.git
+  type: git
+- name: shared
+  source:
+    branch: master
+    uri: https://github.com/konstl000/terraform-modules.git
+  type: git
