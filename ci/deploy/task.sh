@@ -102,7 +102,6 @@ function main(){
   putFileToVault "${KUBE_PATH}/ssh_private_key" rsa/k8s.pem
   putFileToVault "${KUBE_PATH}/ssh_public_key" rsa/k8s.pem.pub
   local k8sCheck=$(checkK8S)
-  exit 1
   if [[ "$k8sCheck" == 0 ]]
   then
     echo -e "${GREEN}Kubernetes is already up and running${DEF}"
