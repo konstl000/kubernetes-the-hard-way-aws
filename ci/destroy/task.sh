@@ -52,6 +52,9 @@ function putFileToVault(){
 function getFileFromVault(){
   vault kv get -format=json /concourse/${TEAM}/"$1" | jq -r '.data.value'
 }
+function deleteFromVault(){
+  vault kv delete /concourse/${TEAM}/"$1"
+}
 function fixKubeconfig(){
   local adminIndex=$(cat ~/.kube/config | yq -r '.users | to_entries[] | select(.value.name=="admin") | .key')
   cat ~/.kube/config | yq -y '.users['"$adminIndex"'].user."client-certificate"="/root/admin.pem" | .users['"$adminIndex"'].user."client-key"="/root/admin-key.pem"'
@@ -90,11 +93,13 @@ function main(){
     else
       echo "${TERRAFORM_STATE}">terraform.tfstate
       mkdir -p rsa
-      echo $(getFileFromVault "${KUBE_PATH}/ssh_private_key")>rsa/k8s.pem
+      echo -e "$(getFileFromVault "${KUBE_PATH}/ssh_private_key")">rsa/k8s.pem
       chmod 600 rsa/k8s.pem
-      echo $(getFileFromVault "${KUBE_PATH}/ssh_public_key")>rsa/k8s.pem.pub
+      echo -e "$(getFileFromVault "${KUBE_PATH}/ssh_public_key")">rsa/k8s.pem.pub
       runTerraform
-      putFileToVault "${KUBE_PATH}/terraform_state" terraform.tfstate
+      deleteFromVault "${KUBE_PATH}/terraform_state"
+      deleteFromVault "${KUBE_PATH}/ssh_private_key"
+      deleteFromVault "${KUBE_PATH}/ssh_public_key"
     fi
     popd
   else

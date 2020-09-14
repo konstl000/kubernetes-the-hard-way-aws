@@ -97,6 +97,7 @@ function main(){
     chmod 600 rsa/k8s.pem
     echo $(getFileFromVault "${KUBE_PATH}/ssh_public_key")>rsa/k8s.pem.pub
   fi
+  echo "$TF_VAR_K8S_VERSION"
   runTerraform
   putFileToVault "${KUBE_PATH}/terraform_state" terraform.tfstate
   putFileToVault "${KUBE_PATH}/ssh_private_key" rsa/k8s.pem
@@ -116,4 +117,3 @@ vaultLogin
 assumeRole ${ROLE_TO_ASSUME}
 fixDNS
 main
-
