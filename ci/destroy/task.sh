@@ -62,20 +62,6 @@ function writeKubeconfig(){
   echo -e "${ADMIN_CERT}">/root/admin.pem
   echo -e "${ADMIN_KEY}">/root/admin-key.pem
 }
-function deployK8S(){
-  pushd ./repo
-  runTerraform
-  putFileToVault "${KUBE_PATH}/terraform_state" terraform.tfstate
-  putFileToVault "${KUBE_PATH}/ssh_private_key" rsa/k8s.pem
-  putFileToVault "${KUBE_PATH}/ssh_public_key" rsa/k8s.pem.pub
-  ./bootstrap/deploy_all.sh
-  fixKubeconfig>kube.config
-  putFileToVault "${KUBE_PATH}/kubeconfig" kube.config
-  putFileToVault "${KUBE_PATH}/admin_cert" bootstrap/admin.pem
-  putFileToVault "${KUBE_PATH}/admin_key" bootstrap/admin-key.pem
-  popd
-  echo -e "${GREEN}Env created successfully${DEF}"
-}
 function checkK8S(){
   set +e
   KUBE_CONFIG=$(getFileFromVault "${KUBE_PATH}/kubeconfig")
@@ -108,6 +94,7 @@ function main(){
       chmod 600 rsa/k8s.pem
       echo $(getFileFromVault "${KUBE_PATH}/ssh_public_key")>rsa/k8s.pem.pub
       runTerraform
+      putFileToVault "${KUBE_PATH}/terraform_state" terraform.tfstate
     fi
     popd
   else
