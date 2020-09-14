@@ -23,3 +23,4 @@ params:
   INTERVAL:
   TEAM:
   KUBE_PATH:
+  TF_VAR_K8S_VERSION:

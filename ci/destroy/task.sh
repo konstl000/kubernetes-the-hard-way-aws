@@ -95,7 +95,7 @@ function main(){
   then
     pushd repo
     curl -L -o nginx.yaml https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/aws/deploy.yaml
-    #kubectl delete -f nginx.yaml
+    kubectl delete -f nginx.yaml
     TERRAFORM_STATE=$(getFileFromVault "${KUBE_PATH}/terraform_state")
     if [[ -z $TERRAFORM_STATE ]]
     then
