@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION='3.4.13'
+VERSION='v3.4.13'
 curl -LO https://github.com/etcd-io/etcd/releases/download/"$VERSION"/etcd-"$VERSION"-linux-amd64.tar.gz
 tar -xvf etcd-"$VERSION"-linux-amd64.tar.gz
 sudo mv etcd-"$VERSION"-linux-amd64/etcd* /usr/local/bin/
