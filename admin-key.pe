@@ -1,0 +1,2718 @@
+{
+  "version": 4,
+  "terraform_version": "0.13.3",
+  "serial": 69,
+  "lineage": "64a071d7-0187-3556-5b00-05f41ab315e6",
+  "outputs": {},
+  "resources": [
+    {
+      "mode": "data",
+      "type": "aws_ami",
+      "name": "ubuntu",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "architecture": "x86_64",
+            "arn": "arn:aws:ec2:eu-central-1::image/ami-052eaddc8881bf2ec",
+            "block_device_mappings": [
+              {
+                "device_name": "/dev/sda1",
+                "ebs": {
+                  "delete_on_termination": "true",
+                  "encrypted": "false",
+                  "iops": "0",
+                  "snapshot_id": "snap-0a31b4b0ef89e280e",
+                  "volume_size": "8",
+                  "volume_type": "gp2"
+                },
+                "no_device": "",
+                "virtual_name": ""
+              },
+              {
+                "device_name": "/dev/sdb",
+                "ebs": {},
+                "no_device": "",
+                "virtual_name": "ephemeral0"
+              },
+              {
+                "device_name": "/dev/sdc",
+                "ebs": {},
+                "no_device": "",
+                "virtual_name": "ephemeral1"
+              }
+            ],
+            "creation_date": "2020-09-17T16:24:38.000Z",
+            "description": "Canonical, Ubuntu, 20.04 LTS, amd64 focal image build on 2020-09-16",
+            "executable_users": null,
+            "filter": [
+              {
+                "name": "name",
+                "values": [
+                  "ubuntu/*ubuntu-focal-20.04*amd64*server*"
+                ]
+              },
+              {
+                "name": "root-device-type",
+                "values": [
+                  "ebs"
+                ]
+              }
+            ],
+            "hypervisor": "xen",
+            "id": "ami-052eaddc8881bf2ec",
+            "image_id": "ami-052eaddc8881bf2ec",
+            "image_location": "099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20200916",
+            "image_owner_alias": null,
+            "image_type": "machine",
+            "kernel_id": null,
+            "most_recent": true,
+            "name": "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20200916",
+            "name_regex": null,
+            "owner_id": "099720109477",
+            "owners": [
+              "099720109477"
+            ],
+            "platform": null,
+            "product_codes": [],
+            "public": true,
+            "ramdisk_id": null,
+            "root_device_name": "/dev/sda1",
+            "root_device_type": "ebs",
+            "root_snapshot_id": "snap-0a31b4b0ef89e280e",
+            "sriov_net_support": "simple",
+            "state": "available",
+            "state_reason": {
+              "code": "UNSET",
+              "message": "UNSET"
+            },
+            "tags": {},
+            "virtualization_type": "hvm"
+          }
+        }
+      ]
+    },
+    {
+      "mode": "data",
+      "type": "aws_caller_identity",
+      "name": "current",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "account_id": "613843495833",
+            "arn": "arn:aws:sts::613843495833:assumed-role/TRUEDEVOPS_DEMO_Terraform/assumed-role",
+            "id": "2020-09-22 15:27:07.133058042 +0000 UTC",
+            "user_id": "AROAY527MNOM4AJFETSTK:assumed-role"
+          }
+        }
+      ]
+    },
+    {
+      "mode": "data",
+      "type": "aws_region",
+      "name": "current",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "description": "Europe (Frankfurt)",
+            "endpoint": "ec2.eu-central-1.amazonaws.com",
+            "id": "eu-central-1",
+            "name": "eu-central-1"
+          }
+        }
+      ]
+    },
+    {
+      "mode": "data",
+      "type": "template_file",
+      "name": "k8smaster",
+      "provider": "provider[\"registry.terraform.io/hashicorp/template\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "filename": null,
+            "id": "b2916d86350e1c1e4cf4c74bd0d1dda766fafc43722f9a5881b4eca88542f4d7",
+            "rendered": "#!/bin/bash\nexec\u003e\u003e/home/ubuntu/install.log\n2\u003e\u00261\napt-get update -y\napt-get upgrade -y\napt-get install -y apt-transport-https\ncurl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -\necho \"deb https://apt.kubernetes.io/ kubernetes-xenial main\" | tee -a /etc/apt/sources.list.d/kubernetes.list\nsudo apt-get update\nfor util in kube-apiserver kube-controller-manager kube-scheduler kube-proxy kubelet kubectl\ndo\n  echo \"getting $util ...\"\n  curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.19.2/bin/linux/amd64/$util\n  chmod +x $util\n  mv $util /usr/local/bin/\ndone\n",
+            "template": "#!/bin/bash\nexec\u003e\u003e/home/ubuntu/install.log\n2\u003e\u00261\napt-get update -y\napt-get upgrade -y\napt-get install -y apt-transport-https\ncurl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -\necho \"deb https://apt.kubernetes.io/ kubernetes-xenial main\" | tee -a /etc/apt/sources.list.d/kubernetes.list\nsudo apt-get update\nfor util in kube-apiserver kube-controller-manager kube-scheduler kube-proxy kubelet kubectl\ndo\n  echo \"getting $util ...\"\n  curl -LO https://storage.googleapis.com/kubernetes-release/release/${K8S_VERSION}/bin/linux/amd64/$util\n  chmod +x $util\n  mv $util /usr/local/bin/\ndone\n",
+            "vars": {
+              "K8S_VERSION": "v1.19.2"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "mode": "data",
+      "type": "template_file",
+      "name": "k8snode",
+      "provider": "provider[\"registry.terraform.io/hashicorp/template\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "filename": null,
+            "id": "5115625370ddc5608c83c663d46f7aef4ca0bab7bf7a785b13ca06511d9c89d8",
+            "rendered": "#!/bin/bash\nexec\u003e\u003e/home/ubuntu/install.log\n2\u003e\u00261\napt-get update -y\napt-get upgrade -y\napt-get install -y apt-transport-https\ncurl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -\necho \"deb https://apt.kubernetes.io/ kubernetes-xenial main\" | tee -a /etc/apt/sources.list.d/kubernetes.list\nsudo apt-get update\nfor util in kubelet kube-proxy kubectl\ndo\n  echo \"getting $util ...\"\n  curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.19.2/bin/linux/amd64/$util\n  chmod +x $util\n  mv $util /usr/local/bin/\ndone\n",
+            "template": "#!/bin/bash\nexec\u003e\u003e/home/ubuntu/install.log\n2\u003e\u00261\napt-get update -y\napt-get upgrade -y\napt-get install -y apt-transport-https\ncurl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -\necho \"deb https://apt.kubernetes.io/ kubernetes-xenial main\" | tee -a /etc/apt/sources.list.d/kubernetes.list\nsudo apt-get update\nfor util in kubelet kube-proxy kubectl\ndo\n  echo \"getting $util ...\"\n  curl -LO https://storage.googleapis.com/kubernetes-release/release/${K8S_VERSION}/bin/linux/amd64/$util\n  chmod +x $util\n  mv $util /usr/local/bin/\ndone\n",
+            "vars": {
+              "K8S_VERSION": "v1.19.2"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_key_pair",
+      "name": "k8s",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:eu-central-1:613843495833:key-pair/k8s_key",
+            "fingerprint": "d2:b7:e0:08:c7:6c:fd:71:c6:3c:cc:ec:28:d7:86:e8",
+            "id": "k8s_key",
+            "key_name": "k8s_key",
+            "key_name_prefix": null,
+            "key_pair_id": "key-04d23ea3abe11e0ef",
+            "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDII1k3c6t/dgCXSvypof7Jy+xduGU4A/NFg1lrf3pePc/Pty7YxvJG3QeuIvRGO0NX1M2GFHTsxTBO1orsp04X0ZxTTWpMEQBUb44DjY+Ohjc6xYqHm7FmVDzMYjMnwKaY4TArsUD9z4Uw+Fay7wraPnQXba1+msSSO/BQ9i3AZSbodvBsJgBTBs46pZnJde/I0RGJpZokSOj6FuJ1gVcPDA3Zt5WgduRPQV9b4FW/Ho2ZV+ViaYcdgKrGh/NkcKQ7T82N2IbbSDqgcnNL+4fC7z8JA6FkJeM64eVfpSE94/D/hsNPVP7VQlwso1pPRyc37GWrkAhr4fkHxbSDOsOTrXOjf6/e115bsEieXQYdlgEifs5Di4M+3NJ9JK+I62Jjo+fVZoPou3XceUwlVqL29rYHrSzCFuOKbDt5SANo17QeTcA0o/dr9duqP6d1vORtGZHLTyaBGxNlaqp1TAkkG7vaR4FpiH/EJYw38LTNr/pT/U5RCBGcbSf0Sbl0E2sZ+6IQEBCQLHnuIXnhZF+rtWHf7qPSo2s3fO2kTmC7u5oeFH+C/dlu6yOr8Kk68/7MilhRuNJ3ZX9Xx82L4ZOeKeQyx0rKPwSzouYDyBfZyzmyE4eC0u/kJvzQqssWgbMcDPK4JSBXujldl5p7agdkRLhiyQIM/v2EthRAk+ljnQ==",
+            "tags": null
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "module": "module.k8smaster_role",
+      "mode": "managed",
+      "type": "aws_iam_policy",
+      "name": "named_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "K8S_DEV_cloud_provider_k8smaster",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::613843495833:policy/K8S_DEV_cloud_provider_k8smaster",
+            "description": "",
+            "id": "arn:aws:iam::613843495833:policy/K8S_DEV_cloud_provider_k8smaster",
+            "name": "K8S_DEV_cloud_provider_k8smaster",
+            "name_prefix": null,
+            "path": "/",
+            "policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"autoscaling:DescribeAutoScalingGroups\",\n        \"autoscaling:DescribeLaunchConfigurations\",\n        \"autoscaling:DescribeTags\",\n        \"ec2:DescribeInstances\",\n        \"ec2:DescribeRegions\",\n        \"ec2:DescribeRouteTables\",\n        \"ec2:DescribeSecurityGroups\",\n        \"ec2:DescribeSubnets\",\n        \"ec2:DescribeVolumes\",\n        \"ec2:CreateSecurityGroup\",\n        \"ec2:CreateTags\",\n        \"ec2:CreateVolume\",\n        \"ec2:ModifyInstanceAttribute\",\n        \"ec2:ModifyVolume\",\n        \"ec2:AttachVolume\",\n        \"ec2:AuthorizeSecurityGroupIngress\",\n        \"ec2:CreateRoute\",\n        \"ec2:DeleteRoute\",\n        \"ec2:DeleteSecurityGroup\",\n        \"ec2:DeleteVolume\",\n        \"ec2:DetachVolume\",\n        \"ec2:RevokeSecurityGroupIngress\",\n        \"ec2:DescribeVpcs\",\n        \"elasticloadbalancing:AddTags\",\n        \"elasticloadbalancing:AttachLoadBalancerToSubnets\",\n        \"elasticloadbalancing:ApplySecurityGroupsToLoadBalancer\",\n        \"elasticloadbalancing:CreateLoadBalancer\",\n        \"elasticloadbalancing:CreateLoadBalancerPolicy\",\n        \"elasticloadbalancing:CreateLoadBalancerListeners\",\n        \"elasticloadbalancing:ConfigureHealthCheck\",\n        \"elasticloadbalancing:DeleteLoadBalancer\",\n        \"elasticloadbalancing:DeleteLoadBalancerListeners\",\n        \"elasticloadbalancing:DescribeLoadBalancers\",\n        \"elasticloadbalancing:DescribeLoadBalancerAttributes\",\n        \"elasticloadbalancing:DetachLoadBalancerFromSubnets\",\n        \"elasticloadbalancing:DeregisterInstancesFromLoadBalancer\",\n        \"elasticloadbalancing:ModifyLoadBalancerAttributes\",\n        \"elasticloadbalancing:RegisterInstancesWithLoadBalancer\",\n        \"elasticloadbalancing:SetLoadBalancerPoliciesForBackendServer\",\n        \"elasticloadbalancing:AddTags\",\n        \"elasticloadbalancing:CreateListener\",\n        \"elasticloadbalancing:CreateTargetGroup\",\n        \"elasticloadbalancing:DeleteListener\",\n        \"elasticloadbalancing:DeleteTargetGroup\",\n        \"elasticloadbalancing:DescribeListeners\",\n        \"elasticloadbalancing:DescribeLoadBalancerPolicies\",\n        \"elasticloadbalancing:DescribeTargetGroups\",\n        \"elasticloadbalancing:DescribeTargetHealth\",\n        \"elasticloadbalancing:ModifyListener\",\n        \"elasticloadbalancing:ModifyTargetGroup\",\n        \"elasticloadbalancing:RegisterTargets\",\n        \"elasticloadbalancing:DeregisterTargets\",\n        \"elasticloadbalancing:SetLoadBalancerPoliciesOfListener\",\n        \"iam:CreateServiceLinkedRole\",\n        \"kms:DescribeKey\"\n      ],\n      \"Resource\": [\n        \"*\"\n      ]\n    }\n  ]\n}\n"
+          },
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "K8S_DEV_cloud_provider_k8smaster_v2",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::613843495833:policy/K8S_DEV_cloud_provider_k8smaster_v2",
+            "description": "",
+            "id": "arn:aws:iam::613843495833:policy/K8S_DEV_cloud_provider_k8smaster_v2",
+            "name": "K8S_DEV_cloud_provider_k8smaster_v2",
+            "name_prefix": null,
+            "path": "/",
+            "policy": "{\n    \"Version\": \"2012-10-17\",\n    \"Statement\": [\n        {\n            \"Effect\": \"Allow\",\n            \"Action\": [\n                \"ec2:DescribeInstances\",\n                \"ec2:DescribeRegions\",\n                \"ecr:GetAuthorizationToken\",\n                \"ecr:BatchCheckLayerAvailability\",\n                \"ecr:GetDownloadUrlForLayer\",\n                \"ecr:GetRepositoryPolicy\",\n                \"ecr:DescribeRepositories\",\n                \"ecr:ListImages\",\n                \"ecr:BatchGetImage\"\n            ],\n            \"Resource\": \"*\"\n        }\n    ]\n}\n"
+          },
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "K8S_DEV_ec2_access_k8smaster",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::613843495833:policy/K8S_DEV_ec2_access_k8smaster",
+            "description": "",
+            "id": "arn:aws:iam::613843495833:policy/K8S_DEV_ec2_access_k8smaster",
+            "name": "K8S_DEV_ec2_access_k8smaster",
+            "name_prefix": null,
+            "path": "/",
+            "policy": "{\n    \"Version\": \"2012-10-17\",\n    \"Statement\": [\n      {\n        \"Effect\": \"Allow\",\n        \"Action\": [\n          \"ec2:AssignPrivateIpAddresses\",\n          \"ec2:AttachNetworkInterface\",\n          \"ec2:CreateNetworkInterface\",\n          \"ec2:DeleteNetworkInterface\",\n          \"ec2:DescribeInstances\",\n          \"ec2:DescribeInstanceTypes\",\n          \"ec2:DescribeTags\",\n          \"ec2:DescribeNetworkInterfaces\",\n          \"ec2:DetachNetworkInterface\",\n          \"ec2:ModifyNetworkInterfaceAttribute\",\n          \"ec2:UnassignPrivateIpAddresses\"\n        ],\n        \"Resource\": \"*\"\n      },\n      {\n         \"Effect\": \"Allow\",\n         \"Action\": [\n            \"ec2:CreateTags\"\n          ],\n          \"Resource\": [\"arn:aws:ec2:*:*:network-interface/*\"]\n      }\n    ]\n}\n"
+          },
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "K8S_DEV_ssm_access_k8smaster",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::613843495833:policy/K8S_DEV_ssm_access_k8smaster",
+            "description": "",
+            "id": "arn:aws:iam::613843495833:policy/K8S_DEV_ssm_access_k8smaster",
+            "name": "K8S_DEV_ssm_access_k8smaster",
+            "name_prefix": null,
+            "path": "/",
+            "policy": "{\n    \"Version\": \"2012-10-17\",\n    \"Statement\": [\n        {\n            \"Effect\": \"Allow\",\n            \"Action\": [\n                \"ssm:DescribeAssociation\",\n                \"ssm:GetDeployablePatchSnapshotForInstance\",\n                \"ssm:GetDocument\",\n                \"ssm:DescribeDocument\",\n                \"ssm:GetManifest\",\n                \"ssm:GetParameters\",\n                \"ssm:ListAssociations\",\n                \"ssm:ListInstanceAssociations\",\n                \"ssm:PutInventory\",\n                \"ssm:PutComplianceItems\",\n                \"ssm:PutConfigurePackageResult\",\n                \"ssm:UpdateAssociationStatus\",\n                \"ssm:UpdateInstanceAssociationStatus\",\n                \"ssm:UpdateInstanceInformation\"\n            ],\n            \"Resource\": \"*\"\n        },\n        {\n            \"Effect\": \"Allow\",\n            \"Action\": [\n                \"ssmmessages:CreateControlChannel\",\n                \"ssmmessages:CreateDataChannel\",\n                \"ssmmessages:OpenControlChannel\",\n                \"ssmmessages:OpenDataChannel\"\n                ],\n             \"Resource\": \"*\"\n        },\n        {\n            \"Effect\": \"Allow\",\n            \"Action\": [\n                \"s3:GetEncryptionConfiguration\"\n            ],\n            \"Resource\": \"*\"\n        },\n        {\n            \"Effect\": \"Allow\",\n            \"Action\": [\n                \"ec2messages:GetMessages\",\n                \"ec2messages:AcknowledgeMessage\",\n                \"ec2messages:SendReply\"\n            ],\n            \"Resource\": \"*\"\n        }\n     ]\n}\n"
+          },
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.k8smaster_role",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::613843495833:role/K8S_DEV_k8smaster",
+            "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}",
+            "create_date": "2020-09-22T15:27:14Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "K8S_DEV_k8smaster",
+            "max_session_duration": 3600,
+            "name": "K8S_DEV_k8smaster",
+            "name_prefix": null,
+            "path": "/",
+            "permissions_boundary": null,
+            "tags": {
+              "environment": "k8s_thehard_way",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "unique_id": "AROAY527MNOM25XS2S4QK"
+          },
+          "private": "bnVsbA==",
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "module": "module.k8smaster_role",
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "attach_named",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "K8S_DEV_cloud_provider_k8smaster",
+          "schema_version": 0,
+          "attributes": {
+            "id": "K8S_DEV_k8smaster-20200922152715928100000003",
+            "policy_arn": "arn:aws:iam::613843495833:policy/K8S_DEV_cloud_provider_k8smaster",
+            "role": "K8S_DEV_k8smaster"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.k8smaster_role.aws_iam_policy.named_policy",
+            "module.k8smaster_role.aws_iam_role.role"
+          ]
+        },
+        {
+          "index_key": "K8S_DEV_cloud_provider_k8smaster_v2",
+          "schema_version": 0,
+          "attributes": {
+            "id": "K8S_DEV_k8smaster-20200922152715917800000002",
+            "policy_arn": "arn:aws:iam::613843495833:policy/K8S_DEV_cloud_provider_k8smaster_v2",
+            "role": "K8S_DEV_k8smaster"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.k8smaster_role.aws_iam_policy.named_policy",
+            "module.k8smaster_role.aws_iam_role.role"
+          ]
+        },
+        {
+          "index_key": "K8S_DEV_ec2_access_k8smaster",
+          "schema_version": 0,
+          "attributes": {
+            "id": "K8S_DEV_k8smaster-20200922152715992100000004",
+            "policy_arn": "arn:aws:iam::613843495833:policy/K8S_DEV_ec2_access_k8smaster",
+            "role": "K8S_DEV_k8smaster"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.k8smaster_role.aws_iam_policy.named_policy",
+            "module.k8smaster_role.aws_iam_role.role"
+          ]
+        },
+        {
+          "index_key": "K8S_DEV_ssm_access_k8smaster",
+          "schema_version": 0,
+          "attributes": {
+            "id": "K8S_DEV_k8smaster-20200922152715912200000001",
+            "policy_arn": "arn:aws:iam::613843495833:policy/K8S_DEV_ssm_access_k8smaster",
+            "role": "K8S_DEV_k8smaster"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.k8smaster_role.aws_iam_policy.named_policy",
+            "module.k8smaster_role.aws_iam_role.role"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.k8smaster_sg",
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "sg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:eu-central-1:613843495833:security-group/sg-0e72234d7b99e2d50",
+            "description": "Allow traffic to the k8s control plane",
+            "egress": [],
+            "id": "sg-0e72234d7b99e2d50",
+            "ingress": [],
+            "name": "k8s-master-sg",
+            "name_prefix": "",
+            "owner_id": "613843495833",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "SG k8s master",
+              "environment": "k8s_thehard_way",
+              "kubernetes.io/cluster/kubernetes-the-hard-way": "owned",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "module.vpc.aws_vpc.project"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "module": "module.k8smaster_sg",
+      "mode": "managed",
+      "type": "aws_security_group_rule",
+      "name": "sgr",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "{\"cidr_blocks\":[\"0.0.0.0/0\"],\"from_port\":0,\"protocol\":\"-1\",\"source_security_group_id\":null,\"to_port\":0,\"type\":\"egress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-2844582544",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "-1",
+            "security_group_id": "sg-0e72234d7b99e2d50",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 0,
+            "type": "egress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8smaster_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        },
+        {
+          "index_key": "{\"cidr_blocks\":[\"0.0.0.0/0\"],\"from_port\":6443,\"protocol\":\"tcp\",\"to_port\":6443,\"type\":\"ingress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "description": null,
+            "from_port": 6443,
+            "id": "sgrule-3462056166",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "tcp",
+            "security_group_id": "sg-0e72234d7b99e2d50",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 6443,
+            "type": "ingress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8smaster_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        },
+        {
+          "index_key": "{\"cidr_blocks\":[\"10.200.0.0/16\"],\"from_port\":0,\"protocol\":\"icmp\",\"to_port\":254,\"type\":\"ingress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "10.200.0.0/16"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-1785492210",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "icmp",
+            "security_group_id": "sg-0e72234d7b99e2d50",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 254,
+            "type": "ingress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8smaster_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        },
+        {
+          "index_key": "{\"cidr_blocks\":[\"10.200.0.0/16\"],\"from_port\":0,\"protocol\":\"tcp\",\"to_port\":65535,\"type\":\"ingress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "10.200.0.0/16"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-2045459097",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "tcp",
+            "security_group_id": "sg-0e72234d7b99e2d50",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 65535,
+            "type": "ingress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8smaster_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        },
+        {
+          "index_key": "{\"cidr_blocks\":[\"10.200.0.0/16\"],\"from_port\":0,\"protocol\":\"udp\",\"to_port\":65535,\"type\":\"ingress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "10.200.0.0/16"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-1353080998",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "udp",
+            "security_group_id": "sg-0e72234d7b99e2d50",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 65535,
+            "type": "ingress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8smaster_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        },
+        {
+          "index_key": "{\"cidr_blocks\":[\"10.32.0.0/24\"],\"from_port\":0,\"protocol\":\"icmp\",\"to_port\":254,\"type\":\"ingress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "10.32.0.0/24"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-1095169891",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "icmp",
+            "security_group_id": "sg-0e72234d7b99e2d50",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 254,
+            "type": "ingress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8smaster_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        },
+        {
+          "index_key": "{\"cidr_blocks\":[\"10.32.0.0/24\"],\"from_port\":0,\"protocol\":\"tcp\",\"to_port\":65535,\"type\":\"ingress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "10.32.0.0/24"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-2862008955",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "tcp",
+            "security_group_id": "sg-0e72234d7b99e2d50",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 65535,
+            "type": "ingress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8smaster_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        },
+        {
+          "index_key": "{\"cidr_blocks\":[\"10.32.0.0/24\"],\"from_port\":0,\"protocol\":\"udp\",\"to_port\":65535,\"type\":\"ingress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "10.32.0.0/24"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-1040542978",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "udp",
+            "security_group_id": "sg-0e72234d7b99e2d50",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 65535,
+            "type": "ingress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8smaster_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.k8snode_role",
+      "mode": "managed",
+      "type": "aws_iam_policy",
+      "name": "named_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "K8S_DEV_cloud_provider_k8snode",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::613843495833:policy/K8S_DEV_cloud_provider_k8snode",
+            "description": "",
+            "id": "arn:aws:iam::613843495833:policy/K8S_DEV_cloud_provider_k8snode",
+            "name": "K8S_DEV_cloud_provider_k8snode",
+            "name_prefix": null,
+            "path": "/",
+            "policy": "{\n    \"Version\": \"2012-10-17\",\n    \"Statement\": [\n        {\n            \"Effect\": \"Allow\",\n            \"Action\": [\n                \"ec2:DescribeInstances\",\n                \"ec2:DescribeRegions\",\n                \"ecr:GetAuthorizationToken\",\n                \"ecr:BatchCheckLayerAvailability\",\n                \"ecr:GetDownloadUrlForLayer\",\n                \"ecr:GetRepositoryPolicy\",\n                \"ecr:DescribeRepositories\",\n                \"ecr:ListImages\",\n                \"ecr:BatchGetImage\"\n            ],\n            \"Resource\": \"*\"\n        } \n    ]\n}\n"
+          },
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "K8S_DEV_ec2_access_k8snode",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::613843495833:policy/K8S_DEV_ec2_access_k8snode",
+            "description": "",
+            "id": "arn:aws:iam::613843495833:policy/K8S_DEV_ec2_access_k8snode",
+            "name": "K8S_DEV_ec2_access_k8snode",
+            "name_prefix": null,
+            "path": "/",
+            "policy": "{\n    \"Version\": \"2012-10-17\",\n    \"Statement\": [\n      {\n        \"Effect\": \"Allow\",\n        \"Action\": [\n          \"ec2:AssignPrivateIpAddresses\",\n          \"ec2:AttachNetworkInterface\",\n          \"ec2:CreateNetworkInterface\",\n          \"ec2:DeleteNetworkInterface\",\n          \"ec2:DescribeInstances\",\n          \"ec2:DescribeInstanceTypes\",\n          \"ec2:DescribeTags\",\n          \"ec2:DescribeNetworkInterfaces\",\n          \"ec2:DetachNetworkInterface\",\n          \"ec2:ModifyNetworkInterfaceAttribute\",\n          \"ec2:UnassignPrivateIpAddresses\"\n        ],\n        \"Resource\": \"*\"\n      },\n      {\n         \"Effect\": \"Allow\",\n         \"Action\": [\n            \"ec2:CreateTags\"\n          ],\n          \"Resource\": [\"arn:aws:ec2:*:*:network-interface/*\"]\n      }\n    ]\n}\n"
+          },
+          "private": "bnVsbA=="
+        },
+        {
+          "index_key": "K8S_DEV_ssm_access_k8snode",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::613843495833:policy/K8S_DEV_ssm_access_k8snode",
+            "description": "",
+            "id": "arn:aws:iam::613843495833:policy/K8S_DEV_ssm_access_k8snode",
+            "name": "K8S_DEV_ssm_access_k8snode",
+            "name_prefix": null,
+            "path": "/",
+            "policy": "{\n    \"Version\": \"2012-10-17\",\n    \"Statement\": [\n        {\n            \"Effect\": \"Allow\",\n            \"Action\": [\n                \"ssm:DescribeAssociation\",\n                \"ssm:GetDeployablePatchSnapshotForInstance\",\n                \"ssm:GetDocument\",\n                \"ssm:DescribeDocument\",\n                \"ssm:GetManifest\",\n                \"ssm:GetParameters\",\n                \"ssm:ListAssociations\",\n                \"ssm:ListInstanceAssociations\",\n                \"ssm:PutInventory\",\n                \"ssm:PutComplianceItems\",\n                \"ssm:PutConfigurePackageResult\",\n                \"ssm:UpdateAssociationStatus\",\n                \"ssm:UpdateInstanceAssociationStatus\",\n                \"ssm:UpdateInstanceInformation\"\n            ],\n            \"Resource\": \"*\"\n        },\n        {\n            \"Effect\": \"Allow\",\n            \"Action\": [\n                \"ssmmessages:CreateControlChannel\",\n                \"ssmmessages:CreateDataChannel\",\n                \"ssmmessages:OpenControlChannel\",\n                \"ssmmessages:OpenDataChannel\"\n                ],\n             \"Resource\": \"*\"\n        },\n        {\n            \"Effect\": \"Allow\",\n            \"Action\": [\n                \"s3:GetEncryptionConfiguration\"\n            ],\n            \"Resource\": \"*\"\n        },\n        {\n            \"Effect\": \"Allow\",\n            \"Action\": [\n                \"ec2messages:GetMessages\",\n                \"ec2messages:AcknowledgeMessage\",\n                \"ec2messages:SendReply\"\n            ],\n            \"Resource\": \"*\"\n        }\n     ]\n}\n"
+          },
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "module": "module.k8snode_role",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::613843495833:role/K8S_DEV_k8snode",
+            "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}",
+            "create_date": "2020-09-22T15:27:14Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "K8S_DEV_k8snode",
+            "max_session_duration": 3600,
+            "name": "K8S_DEV_k8snode",
+            "name_prefix": null,
+            "path": "/",
+            "permissions_boundary": null,
+            "tags": {
+              "environment": "k8s_thehard_way",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "unique_id": "AROAY527MNOM34RLDVBWH"
+          },
+          "private": "bnVsbA==",
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "module": "module.k8snode_role",
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "attach_named",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "K8S_DEV_cloud_provider_k8snode",
+          "schema_version": 0,
+          "attributes": {
+            "id": "K8S_DEV_k8snode-20200922152716224100000006",
+            "policy_arn": "arn:aws:iam::613843495833:policy/K8S_DEV_cloud_provider_k8snode",
+            "role": "K8S_DEV_k8snode"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.k8snode_role.aws_iam_policy.named_policy",
+            "module.k8snode_role.aws_iam_role.role"
+          ]
+        },
+        {
+          "index_key": "K8S_DEV_ec2_access_k8snode",
+          "schema_version": 0,
+          "attributes": {
+            "id": "K8S_DEV_k8snode-20200922152716262400000007",
+            "policy_arn": "arn:aws:iam::613843495833:policy/K8S_DEV_ec2_access_k8snode",
+            "role": "K8S_DEV_k8snode"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.k8snode_role.aws_iam_policy.named_policy",
+            "module.k8snode_role.aws_iam_role.role"
+          ]
+        },
+        {
+          "index_key": "K8S_DEV_ssm_access_k8snode",
+          "schema_version": 0,
+          "attributes": {
+            "id": "K8S_DEV_k8snode-20200922152716161000000005",
+            "policy_arn": "arn:aws:iam::613843495833:policy/K8S_DEV_ssm_access_k8snode",
+            "role": "K8S_DEV_k8snode"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.k8snode_role.aws_iam_policy.named_policy",
+            "module.k8snode_role.aws_iam_role.role"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.k8snode_sg",
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "sg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:eu-central-1:613843495833:security-group/sg-0a41b1685116855a9",
+            "description": "Allow traffic to the k8s control plane",
+            "egress": [],
+            "id": "sg-0a41b1685116855a9",
+            "ingress": [],
+            "name": "k8s-node-sg",
+            "name_prefix": "",
+            "owner_id": "613843495833",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "SG k8s node",
+              "environment": "k8s_thehard_way",
+              "kubernetes.io/cluster/kubernetes-the-hard-way": "owned",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "module.vpc.aws_vpc.project"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "module": "module.k8snode_sg",
+      "mode": "managed",
+      "type": "aws_security_group_rule",
+      "name": "sgr",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "{\"cidr_blocks\":[\"0.0.0.0/0\"],\"from_port\":0,\"protocol\":\"-1\",\"source_security_group_id\":null,\"to_port\":0,\"type\":\"egress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-424269254",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "-1",
+            "security_group_id": "sg-0a41b1685116855a9",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 0,
+            "type": "egress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8snode_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        },
+        {
+          "index_key": "{\"cidr_blocks\":[\"10.200.0.0/16\"],\"from_port\":0,\"protocol\":\"icmp\",\"to_port\":254,\"type\":\"ingress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "10.200.0.0/16"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-1424911476",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "icmp",
+            "security_group_id": "sg-0a41b1685116855a9",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 254,
+            "type": "ingress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8snode_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        },
+        {
+          "index_key": "{\"cidr_blocks\":[\"10.200.0.0/16\"],\"from_port\":0,\"protocol\":\"tcp\",\"to_port\":65535,\"type\":\"ingress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "10.200.0.0/16"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-2098110098",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "tcp",
+            "security_group_id": "sg-0a41b1685116855a9",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 65535,
+            "type": "ingress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8snode_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        },
+        {
+          "index_key": "{\"cidr_blocks\":[\"10.200.0.0/16\"],\"from_port\":0,\"protocol\":\"udp\",\"to_port\":65535,\"type\":\"ingress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "10.200.0.0/16"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-1413727405",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "udp",
+            "security_group_id": "sg-0a41b1685116855a9",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 65535,
+            "type": "ingress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8snode_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        },
+        {
+          "index_key": "{\"cidr_blocks\":[\"10.32.0.0/24\"],\"from_port\":0,\"protocol\":\"icmp\",\"to_port\":254,\"type\":\"ingress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "10.32.0.0/24"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-2905582212",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "icmp",
+            "security_group_id": "sg-0a41b1685116855a9",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 254,
+            "type": "ingress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8snode_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        },
+        {
+          "index_key": "{\"cidr_blocks\":[\"10.32.0.0/24\"],\"from_port\":0,\"protocol\":\"tcp\",\"to_port\":65535,\"type\":\"ingress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "10.32.0.0/24"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-2484393213",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "tcp",
+            "security_group_id": "sg-0a41b1685116855a9",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 65535,
+            "type": "ingress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8snode_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        },
+        {
+          "index_key": "{\"cidr_blocks\":[\"10.32.0.0/24\"],\"from_port\":0,\"protocol\":\"udp\",\"to_port\":65535,\"type\":\"ingress\"}",
+          "schema_version": 2,
+          "attributes": {
+            "cidr_blocks": [
+              "10.32.0.0/24"
+            ],
+            "description": null,
+            "from_port": 0,
+            "id": "sgrule-8876932",
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "udp",
+            "security_group_id": "sg-0a41b1685116855a9",
+            "self": false,
+            "source_security_group_id": null,
+            "to_port": 65535,
+            "type": "ingress"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjIifQ==",
+          "dependencies": [
+            "module.k8snode_sg.aws_security_group.sg",
+            "module.vpc.aws_vpc.project"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.master-asg",
+      "mode": "data",
+      "type": "template_cloudinit_config",
+      "name": "config",
+      "provider": "provider[\"registry.terraform.io/hashicorp/template\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "base64_encode": true,
+            "gzip": true,
+            "id": "3918905139",
+            "part": [
+              {
+                "content": "#!/bin/bash\nif [[ 0 == 1 ]]\nthen\n  curl -o ~/inspector -L https://inspector-agent.amazonaws.com/linux/latest/install\n  chmod +x ~/inspector\n  ~/inspector \u003e~/inspector.log 2\u003e~/inspector.log\nfi\n\n",
+                "content_type": "text/x-shellscript",
+                "filename": "1-default.sh",
+                "merge_type": ""
+              },
+              {
+                "content": "#!/bin/bash\nexec\u003e\u003e/home/ubuntu/install.log\n2\u003e\u00261\napt-get update -y\napt-get upgrade -y\napt-get install -y apt-transport-https\ncurl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -\necho \"deb https://apt.kubernetes.io/ kubernetes-xenial main\" | tee -a /etc/apt/sources.list.d/kubernetes.list\nsudo apt-get update\nfor util in kube-apiserver kube-controller-manager kube-scheduler kube-proxy kubelet kubectl\ndo\n  echo \"getting $util ...\"\n  curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.19.2/bin/linux/amd64/$util\n  chmod +x $util\n  mv $util /usr/local/bin/\ndone\n",
+                "content_type": "text/x-shellscript",
+                "filename": "2-custom.sh",
+                "merge_type": ""
+              },
+              {
+                "content": "#!/bin/bash\nsnap install amazon-ssm-agent --classic\n",
+                "content_type": "text/x-shellscript",
+                "filename": "3-ssm.sh",
+                "merge_type": ""
+              }
+            ],
+            "rendered": "H4sIAAAAAAAA/7xU32sENRB+D9z/MJ7iiyTpnaJ45Q7U9kFoLUgVpPRhLpnbDc0mIZnUPSn+7bJ7P7q1j4U+Zb+Pycw330z2lxiYAsv7faIVdNWzS5hZd64newnbWIPFvF/Pb3+9vf757o/frn76/a+5GJD8k3JxMaxgoS5mYiaknAbNxCn3lSspFsdjLDKjaTsKfAk75ylgR+v5QlraYfWsSjt/vXmfMZQdZXkdTLQuNCv4Yet4EjDKZupZ97K05H0x2SWeiVvX0TuFX36hty7oLZZWuB08PMAFrNewgMdHwS0FAWBq9iAj/KtdKIkMxwzyBlrmVFb6lZTYUGCFHf4TA/5dlImd9i7UXntkKjyEMno/5Gy7aOGbfppUwJsSmwlQPjaw/D8jdk58zOSlNLVw7D7PY+rJbDa6jR3puq2B68mVsaPl5uuFwMSyIYaaLDKB3E+YJqN9Qx1vg9zDQPGgPcXMcpyPOAyvnKeV0DxhQ0UZH6tVTYyNp3FSmFjbaIZTPtFeNamBFzgiQGtBCjJthLml7TkfJlZPdUs5EFNRLmp4hbKn4NBDhy7M4QWYCCSCJh7L6BJrNlSUd4WV1ZM8AyNKtRHemiF2MUNl58GFsZDE5ArlZ8oHaGLgHL2nLDsM2Jz4Ylqy1Z9gyrHfj5+eeDwNe2GjADj02BCzCw18NRZTSs3PL+Hm7tx94ZixoaONg5TRyokDmTxhIX06nxdq8aNajgtxeBvY2e+/02Od6cM4Ed3zUYOuJWsfDfrxsrAx0Me2/1tZyieufgmYzut6+EsMAg6/DZDSeCzFmXc9STkT/wUAAP//3ElBypUFAAA="
+          }
+        }
+      ]
+    },
+    {
+      "module": "module.master-asg",
+      "mode": "data",
+      "type": "template_file",
+      "name": "default_script",
+      "provider": "provider[\"registry.terraform.io/hashicorp/template\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "filename": null,
+            "id": "ea3d0defff3c29d582c2102502c639cde336210e7517d5f8d1b2014bdbb3c48d",
+            "rendered": "#!/bin/bash\nif [[ 0 == 1 ]]\nthen\n  curl -o ~/inspector -L https://inspector-agent.amazonaws.com/linux/latest/install\n  chmod +x ~/inspector\n  ~/inspector \u003e~/inspector.log 2\u003e~/inspector.log\nfi\n\n",
+            "template": "#!/bin/bash\nif [[ ${INSPECTOR} == 1 ]]\nthen\n  curl -o ~/inspector -L https://inspector-agent.amazonaws.com/linux/latest/install\n  chmod +x ~/inspector\n  ~/inspector \u003e~/inspector.log 2\u003e~/inspector.log\nfi\n\n",
+            "vars": {
+              "INSPECTOR": "0"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "module": "module.master-asg",
+      "mode": "managed",
+      "type": "aws_autoscaling_group",
+      "name": "node",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:autoscaling:eu-central-1:613843495833:autoScalingGroup:4f180504-3810-4b15-91b2-780044762dea:autoScalingGroupName/k8smasters",
+            "availability_zones": [
+              "eu-central-1a",
+              "eu-central-1b",
+              "eu-central-1c"
+            ],
+            "default_cooldown": 300,
+            "desired_capacity": 3,
+            "enabled_metrics": null,
+            "force_delete": false,
+            "health_check_grace_period": 300,
+            "health_check_type": "EC2",
+            "id": "k8smasters",
+            "initial_lifecycle_hook": [],
+            "launch_configuration": "k8smasters20200922152718020500000008",
+            "launch_template": [],
+            "load_balancers": null,
+            "max_instance_lifetime": 0,
+            "max_size": 3,
+            "metrics_granularity": "1Minute",
+            "min_elb_capacity": null,
+            "min_size": 3,
+            "mixed_instances_policy": [],
+            "name": "k8smasters",
+            "name_prefix": null,
+            "placement_group": "",
+            "protect_from_scale_in": false,
+            "service_linked_role_arn": "arn:aws:iam::613843495833:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+            "suspended_processes": null,
+            "tag": [
+              {
+                "key": "InspectorScan",
+                "propagate_at_launch": true,
+                "value": "false"
+              },
+              {
+                "key": "Maintenance",
+                "propagate_at_launch": true,
+                "value": "k8s_dev"
+              },
+              {
+                "key": "Name",
+                "propagate_at_launch": true,
+                "value": "k8smasters-node"
+              },
+              {
+                "key": "Role",
+                "propagate_at_launch": true,
+                "value": "k8smaster"
+              },
+              {
+                "key": "environment",
+                "propagate_at_launch": true,
+                "value": "k8s_thehard_way"
+              },
+              {
+                "key": "kubernetes.io/cluster/kubernetes-the-hard-way",
+                "propagate_at_launch": true,
+                "value": "owned"
+              },
+              {
+                "key": "project_name",
+                "propagate_at_launch": true,
+                "value": "k8s_the_hard_way"
+              },
+              {
+                "key": "role",
+                "propagate_at_launch": true,
+                "value": "k8s"
+              },
+              {
+                "key": "stage",
+                "propagate_at_launch": true,
+                "value": "DEV"
+              },
+              {
+                "key": "support-contact",
+                "propagate_at_launch": true,
+                "value": "none"
+              },
+              {
+                "key": "tagging-version",
+                "propagate_at_launch": true,
+                "value": "1.0"
+              }
+            ],
+            "tags": null,
+            "target_group_arns": null,
+            "termination_policies": null,
+            "timeouts": null,
+            "vpc_zone_identifier": [
+              "subnet-00596fbe9766ae699",
+              "subnet-0463ef2d393f0a745",
+              "subnet-099ae83adc25061f1"
+            ],
+            "wait_for_capacity_timeout": "10m",
+            "wait_for_elb_capacity": null
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiZGVsZXRlIjo2MDAwMDAwMDAwMDB9fQ==",
+          "dependencies": [
+            "aws_key_pair.k8s",
+            "data.aws_ami.ubuntu",
+            "module.k8smaster_role.aws_iam_role.role",
+            "module.k8smaster_sg.aws_security_group.sg",
+            "module.master-asg.aws_iam_instance_profile.asg",
+            "module.master-asg.aws_launch_configuration.node",
+            "module.master-asg.data.template_cloudinit_config.config",
+            "module.vpc.aws_subnet.project",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.master-asg",
+      "mode": "managed",
+      "type": "aws_autoscaling_policy",
+      "name": "asp-1",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "adjustment_type": "",
+            "arn": "arn:aws:autoscaling:eu-central-1:613843495833:scalingPolicy:61a986e8-74d4-4691-80e4-f48f1756858a:autoScalingGroupName/k8smasters:policyName/autoscaling-k8smasters",
+            "autoscaling_group_name": "k8smasters",
+            "cooldown": 0,
+            "estimated_instance_warmup": 0,
+            "id": "autoscaling-k8smasters",
+            "metric_aggregation_type": "",
+            "min_adjustment_magnitude": null,
+            "name": "autoscaling-k8smasters",
+            "policy_type": "TargetTrackingScaling",
+            "scaling_adjustment": 0,
+            "step_adjustment": [],
+            "target_tracking_configuration": [
+              {
+                "customized_metric_specification": [],
+                "disable_scale_in": true,
+                "predefined_metric_specification": [
+                  {
+                    "predefined_metric_type": "ASGAverageCPUUtilization",
+                    "resource_label": ""
+                  }
+                ],
+                "target_value": 70
+              }
+            ]
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_key_pair.k8s",
+            "data.aws_ami.ubuntu",
+            "module.k8smaster_role.aws_iam_role.role",
+            "module.k8smaster_sg.aws_security_group.sg",
+            "module.master-asg.aws_autoscaling_group.node",
+            "module.master-asg.aws_iam_instance_profile.asg",
+            "module.master-asg.aws_launch_configuration.node",
+            "module.master-asg.data.template_cloudinit_config.config",
+            "module.vpc.aws_subnet.project",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.master-asg",
+      "mode": "managed",
+      "type": "aws_iam_instance_profile",
+      "name": "asg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::613843495833:instance-profile/k8smaster",
+            "create_date": "2020-09-22T15:27:15Z",
+            "id": "k8smaster",
+            "name": "k8smaster",
+            "name_prefix": null,
+            "path": "/",
+            "role": "K8S_DEV_k8smaster",
+            "unique_id": "AIPAY527MNOM6MRTIZRPR"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.k8smaster_role.aws_iam_role.role"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "module": "module.master-asg",
+      "mode": "managed",
+      "type": "aws_launch_configuration",
+      "name": "node",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:autoscaling:eu-central-1:613843495833:launchConfiguration:fc81de00-a766-476b-842a-332439ae5dd3:launchConfigurationName/k8smasters20200922152718020500000008",
+            "associate_public_ip_address": true,
+            "ebs_block_device": [],
+            "ebs_optimized": false,
+            "enable_monitoring": true,
+            "ephemeral_block_device": [],
+            "iam_instance_profile": "k8smaster",
+            "id": "k8smasters20200922152718020500000008",
+            "image_id": "ami-052eaddc8881bf2ec",
+            "instance_type": "t3.medium",
+            "key_name": "k8s_key",
+            "name": "k8smasters20200922152718020500000008",
+            "name_prefix": "k8smasters",
+            "placement_tenancy": null,
+            "root_block_device": [
+              {
+                "delete_on_termination": true,
+                "encrypted": true,
+                "iops": 0,
+                "volume_size": 30,
+                "volume_type": "gp2"
+              }
+            ],
+            "security_groups": [
+              "sg-0e72234d7b99e2d50"
+            ],
+            "spot_price": "0.0418",
+            "user_data": null,
+            "user_data_base64": "H4sIAAAAAAAA/7xU32sENRB+D9z/MJ7iiyTpnaJ45Q7U9kFoLUgVpPRhLpnbDc0mIZnUPSn+7bJ7P7q1j4U+Zb+Pycw330z2lxiYAsv7faIVdNWzS5hZd64newnbWIPFvF/Pb3+9vf757o/frn76/a+5GJD8k3JxMaxgoS5mYiaknAbNxCn3lSspFsdjLDKjaTsKfAk75ylgR+v5QlraYfWsSjt/vXmfMZQdZXkdTLQuNCv4Yet4EjDKZupZ97K05H0x2SWeiVvX0TuFX36hty7oLZZWuB08PMAFrNewgMdHwS0FAWBq9iAj/KtdKIkMxwzyBlrmVFb6lZTYUGCFHf4TA/5dlImd9i7UXntkKjyEMno/5Gy7aOGbfppUwJsSmwlQPjaw/D8jdk58zOSlNLVw7D7PY+rJbDa6jR3puq2B68mVsaPl5uuFwMSyIYaaLDKB3E+YJqN9Qx1vg9zDQPGgPcXMcpyPOAyvnKeV0DxhQ0UZH6tVTYyNp3FSmFjbaIZTPtFeNamBFzgiQGtBCjJthLml7TkfJlZPdUs5EFNRLmp4hbKn4NBDhy7M4QWYCCSCJh7L6BJrNlSUd4WV1ZM8AyNKtRHemiF2MUNl58GFsZDE5ArlZ8oHaGLgHL2nLDsM2Jz4Ylqy1Z9gyrHfj5+eeDwNe2GjADj02BCzCw18NRZTSs3PL+Hm7tx94ZixoaONg5TRyokDmTxhIX06nxdq8aNajgtxeBvY2e+/02Od6cM4Ed3zUYOuJWsfDfrxsrAx0Me2/1tZyieufgmYzut6+EsMAg6/DZDSeCzFmXc9STkT/wUAAP//3ElBypUFAAA=",
+            "vpc_classic_link_id": "",
+            "vpc_classic_link_security_groups": null
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_key_pair.k8s",
+            "data.aws_ami.ubuntu",
+            "module.k8smaster_role.aws_iam_role.role",
+            "module.k8smaster_sg.aws_security_group.sg",
+            "module.master-asg.aws_iam_instance_profile.asg",
+            "module.master-asg.data.template_cloudinit_config.config",
+            "module.vpc.aws_vpc.project"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "module": "module.nlb",
+      "mode": "managed",
+      "type": "aws_lb",
+      "name": "nlb",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "access_logs": [
+              {
+                "bucket": "",
+                "enabled": false,
+                "prefix": ""
+              }
+            ],
+            "arn": "arn:aws:elasticloadbalancing:eu-central-1:613843495833:loadbalancer/net/k8s-nlb/11d778052e6973e8",
+            "arn_suffix": "net/k8s-nlb/11d778052e6973e8",
+            "dns_name": "k8s-nlb-11d778052e6973e8.elb.eu-central-1.amazonaws.com",
+            "drop_invalid_header_fields": null,
+            "enable_cross_zone_load_balancing": true,
+            "enable_deletion_protection": false,
+            "enable_http2": null,
+            "id": "arn:aws:elasticloadbalancing:eu-central-1:613843495833:loadbalancer/net/k8s-nlb/11d778052e6973e8",
+            "idle_timeout": null,
+            "internal": false,
+            "ip_address_type": "ipv4",
+            "load_balancer_type": "network",
+            "name": "k8s-nlb",
+            "name_prefix": null,
+            "security_groups": [],
+            "subnet_mapping": [
+              {
+                "allocation_id": "",
+                "private_ipv4_address": "",
+                "subnet_id": "subnet-00596fbe9766ae699"
+              },
+              {
+                "allocation_id": "",
+                "private_ipv4_address": "",
+                "subnet_id": "subnet-0463ef2d393f0a745"
+              },
+              {
+                "allocation_id": "",
+                "private_ipv4_address": "",
+                "subnet_id": "subnet-099ae83adc25061f1"
+              }
+            ],
+            "subnets": [
+              "subnet-00596fbe9766ae699",
+              "subnet-0463ef2d393f0a745",
+              "subnet-099ae83adc25061f1"
+            ],
+            "tags": {
+              "Name": "k8s-nlb",
+              "environment": "k8s_thehard_way",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-03d940693521c7a36",
+            "zone_id": "Z3F0SRJ5LGBH90"
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "module.vpc.aws_subnet.project",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.nlb",
+      "mode": "managed",
+      "type": "aws_lb_listener",
+      "name": "list",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "k8s-api",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:elasticloadbalancing:eu-central-1:613843495833:listener/net/k8s-nlb/11d778052e6973e8/02a0cf063dfe8fa8",
+            "certificate_arn": null,
+            "default_action": [
+              {
+                "authenticate_cognito": [],
+                "authenticate_oidc": [],
+                "fixed_response": [],
+                "forward": [],
+                "order": 1,
+                "redirect": [],
+                "target_group_arn": "arn:aws:elasticloadbalancing:eu-central-1:613843495833:targetgroup/k8s-api/4f1d3f70ccc9beaf",
+                "type": "forward"
+              }
+            ],
+            "id": "arn:aws:elasticloadbalancing:eu-central-1:613843495833:listener/net/k8s-nlb/11d778052e6973e8/02a0cf063dfe8fa8",
+            "load_balancer_arn": "arn:aws:elasticloadbalancing:eu-central-1:613843495833:loadbalancer/net/k8s-nlb/11d778052e6973e8",
+            "port": 443,
+            "protocol": "TCP",
+            "ssl_policy": "",
+            "timeouts": null
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsicmVhZCI6NjAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.nlb.aws_lb.nlb",
+            "module.nlb.aws_lb_target_group.tg",
+            "module.vpc.aws_subnet.project",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.nlb",
+      "mode": "managed",
+      "type": "aws_lb_target_group",
+      "name": "tg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "k8s-api",
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:elasticloadbalancing:eu-central-1:613843495833:targetgroup/k8s-api/4f1d3f70ccc9beaf",
+            "arn_suffix": "targetgroup/k8s-api/4f1d3f70ccc9beaf",
+            "deregistration_delay": 10,
+            "health_check": [
+              {
+                "enabled": true,
+                "healthy_threshold": 3,
+                "interval": 10,
+                "matcher": "",
+                "path": "",
+                "port": "6443",
+                "protocol": "TCP",
+                "timeout": 10,
+                "unhealthy_threshold": 3
+              }
+            ],
+            "id": "arn:aws:elasticloadbalancing:eu-central-1:613843495833:targetgroup/k8s-api/4f1d3f70ccc9beaf",
+            "lambda_multi_value_headers_enabled": false,
+            "load_balancing_algorithm_type": null,
+            "name": "k8s-api",
+            "name_prefix": null,
+            "port": 6443,
+            "protocol": "TCP",
+            "proxy_protocol_v2": false,
+            "slow_start": 0,
+            "stickiness": [],
+            "tags": {
+              "Name": "k8s-nlb",
+              "environment": "k8s_thehard_way",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "target_type": "instance",
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.nlb.aws_lb.nlb",
+            "module.vpc.aws_subnet.project",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.node-asg",
+      "mode": "data",
+      "type": "template_cloudinit_config",
+      "name": "config",
+      "provider": "provider[\"registry.terraform.io/hashicorp/template\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "base64_encode": true,
+            "gzip": true,
+            "id": "153516062",
+            "part": [
+              {
+                "content": "#!/bin/bash\nif [[ 0 == 1 ]]\nthen\n  curl -o ~/inspector -L https://inspector-agent.amazonaws.com/linux/latest/install\n  chmod +x ~/inspector\n  ~/inspector \u003e~/inspector.log 2\u003e~/inspector.log\nfi\n\n",
+                "content_type": "text/x-shellscript",
+                "filename": "1-default.sh",
+                "merge_type": ""
+              },
+              {
+                "content": "#!/bin/bash\nexec\u003e\u003e/home/ubuntu/install.log\n2\u003e\u00261\napt-get update -y\napt-get upgrade -y\napt-get install -y apt-transport-https\ncurl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -\necho \"deb https://apt.kubernetes.io/ kubernetes-xenial main\" | tee -a /etc/apt/sources.list.d/kubernetes.list\nsudo apt-get update\nfor util in kubelet kube-proxy kubectl\ndo\n  echo \"getting $util ...\"\n  curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.19.2/bin/linux/amd64/$util\n  chmod +x $util\n  mv $util /usr/local/bin/\ndone\n",
+                "content_type": "text/x-shellscript",
+                "filename": "2-custom.sh",
+                "merge_type": ""
+              },
+              {
+                "content": "#!/bin/bash\nsnap install amazon-ssm-agent --classic\n",
+                "content_type": "text/x-shellscript",
+                "filename": "3-ssm.sh",
+                "merge_type": ""
+              }
+            ],
+            "rendered": "H4sIAAAAAAAA/7xU32sENRB+D9z/MJ7iiyTpnaJ45Q7U9kFoLUgVpPRhLpnbDc0mIZnUPSn+7bJ7P7q1j4U+zc7H/Phm5tv8EgNTYHm/T7SCrnp2CTPrzvVkL2Eba7CY9+v57a+31z/f/fHb1U+//zUXgyf/pFxcDCtYqIuZmAkpp0Ezcap95UqKxfEYi8xo2o4CX8LOeQrY0Xq+kJZ2WD2r0s5fM+8zhrKjLK+DidaFZgU/bB1PAkbaTD3rXpaWvC8mu8Qzces6esfwyy/01gW9xdIKt4OHB7iA9RoW8PgouKUgAEzNHmSEf7ULJZHhmEHeQMucykq/ghIbCqyww39iwL+LMrHT3oXaa49MhYdQRu+Hmm0XLXzTT4sKeNNiM3GUjw0s/4+InRMfW/JSmlo4dp+3Y+rJbDa6jR3puq2B62kr40TLzdcLgYllQww1WWQCuZ8gTUb7Bjpmg9zDAPHAPcXMcryPOByvnK+V0DxhQ0UZH6tVTYyNp/FSmFjbaAYrn2ivmtTACxw9QGtBCjJthLml7bkeJlZPdUs5EFNRLmp4dWVPwaGHDl2YwwswEUgETTy20SXWbKgo7worqyd1BkSUaiO8XYbYxQyVnQcXxkaeeLQy5djvx0/DXtgoAA5sG2J2oYGvxjSl1Pys6Zu78xyFY8aGjgvB5A7yncySyRMW0if7vFCLH9VyPO1B5djZ77/TY5+pxE9A93zkoGvJ2keDfkwWNgb6mI6/laV8oohLwHQW3uF/HwgcHgCQ0ngsxZl3M0k5E/8FAAD//3y3m69fBQAA"
+          }
+        }
+      ]
+    },
+    {
+      "module": "module.node-asg",
+      "mode": "data",
+      "type": "template_file",
+      "name": "default_script",
+      "provider": "provider[\"registry.terraform.io/hashicorp/template\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "filename": null,
+            "id": "ea3d0defff3c29d582c2102502c639cde336210e7517d5f8d1b2014bdbb3c48d",
+            "rendered": "#!/bin/bash\nif [[ 0 == 1 ]]\nthen\n  curl -o ~/inspector -L https://inspector-agent.amazonaws.com/linux/latest/install\n  chmod +x ~/inspector\n  ~/inspector \u003e~/inspector.log 2\u003e~/inspector.log\nfi\n\n",
+            "template": "#!/bin/bash\nif [[ ${INSPECTOR} == 1 ]]\nthen\n  curl -o ~/inspector -L https://inspector-agent.amazonaws.com/linux/latest/install\n  chmod +x ~/inspector\n  ~/inspector \u003e~/inspector.log 2\u003e~/inspector.log\nfi\n\n",
+            "vars": {
+              "INSPECTOR": "0"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "module": "module.node-asg",
+      "mode": "managed",
+      "type": "aws_autoscaling_group",
+      "name": "node",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:autoscaling:eu-central-1:613843495833:autoScalingGroup:1e38c1a6-0c05-4872-875e-1cfd787734d4:autoScalingGroupName/k8snodes",
+            "availability_zones": [
+              "eu-central-1a",
+              "eu-central-1b",
+              "eu-central-1c"
+            ],
+            "default_cooldown": 300,
+            "desired_capacity": 3,
+            "enabled_metrics": null,
+            "force_delete": false,
+            "health_check_grace_period": 300,
+            "health_check_type": "EC2",
+            "id": "k8snodes",
+            "initial_lifecycle_hook": [],
+            "launch_configuration": "k8snodes2020092215271965950000000a",
+            "launch_template": [],
+            "load_balancers": null,
+            "max_instance_lifetime": 0,
+            "max_size": 3,
+            "metrics_granularity": "1Minute",
+            "min_elb_capacity": null,
+            "min_size": 3,
+            "mixed_instances_policy": [],
+            "name": "k8snodes",
+            "name_prefix": null,
+            "placement_group": "",
+            "protect_from_scale_in": false,
+            "service_linked_role_arn": "arn:aws:iam::613843495833:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+            "suspended_processes": null,
+            "tag": [
+              {
+                "key": "InspectorScan",
+                "propagate_at_launch": true,
+                "value": "false"
+              },
+              {
+                "key": "Maintenance",
+                "propagate_at_launch": true,
+                "value": "k8s_dev"
+              },
+              {
+                "key": "Name",
+                "propagate_at_launch": true,
+                "value": "k8snodes-node"
+              },
+              {
+                "key": "Role",
+                "propagate_at_launch": true,
+                "value": "k8snode"
+              },
+              {
+                "key": "environment",
+                "propagate_at_launch": true,
+                "value": "k8s_thehard_way"
+              },
+              {
+                "key": "kubernetes.io/cluster/kubernetes-the-hard-way",
+                "propagate_at_launch": true,
+                "value": "owned"
+              },
+              {
+                "key": "project_name",
+                "propagate_at_launch": true,
+                "value": "k8s_the_hard_way"
+              },
+              {
+                "key": "role",
+                "propagate_at_launch": true,
+                "value": "k8s"
+              },
+              {
+                "key": "stage",
+                "propagate_at_launch": true,
+                "value": "DEV"
+              },
+              {
+                "key": "support-contact",
+                "propagate_at_launch": true,
+                "value": "none"
+              },
+              {
+                "key": "tagging-version",
+                "propagate_at_launch": true,
+                "value": "1.0"
+              }
+            ],
+            "tags": null,
+            "target_group_arns": null,
+            "termination_policies": null,
+            "timeouts": null,
+            "vpc_zone_identifier": [
+              "subnet-00596fbe9766ae699",
+              "subnet-0463ef2d393f0a745",
+              "subnet-099ae83adc25061f1"
+            ],
+            "wait_for_capacity_timeout": "10m",
+            "wait_for_elb_capacity": null
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiZGVsZXRlIjo2MDAwMDAwMDAwMDB9fQ==",
+          "dependencies": [
+            "aws_key_pair.k8s",
+            "data.aws_ami.ubuntu",
+            "module.k8snode_role.aws_iam_role.role",
+            "module.k8snode_sg.aws_security_group.sg",
+            "module.node-asg.aws_iam_instance_profile.asg",
+            "module.node-asg.aws_launch_configuration.node",
+            "module.node-asg.data.template_cloudinit_config.config",
+            "module.vpc.aws_subnet.project",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.node-asg",
+      "mode": "managed",
+      "type": "aws_autoscaling_policy",
+      "name": "asp-1",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "adjustment_type": "",
+            "arn": "arn:aws:autoscaling:eu-central-1:613843495833:scalingPolicy:13fb66f7-e7d8-47cc-9d8f-2ffa443aa9af:autoScalingGroupName/k8snodes:policyName/autoscaling-k8snodes",
+            "autoscaling_group_name": "k8snodes",
+            "cooldown": 0,
+            "estimated_instance_warmup": 0,
+            "id": "autoscaling-k8snodes",
+            "metric_aggregation_type": "",
+            "min_adjustment_magnitude": null,
+            "name": "autoscaling-k8snodes",
+            "policy_type": "TargetTrackingScaling",
+            "scaling_adjustment": 0,
+            "step_adjustment": [],
+            "target_tracking_configuration": [
+              {
+                "customized_metric_specification": [],
+                "disable_scale_in": true,
+                "predefined_metric_specification": [
+                  {
+                    "predefined_metric_type": "ASGAverageCPUUtilization",
+                    "resource_label": ""
+                  }
+                ],
+                "target_value": 70
+              }
+            ]
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_key_pair.k8s",
+            "data.aws_ami.ubuntu",
+            "module.k8snode_role.aws_iam_role.role",
+            "module.k8snode_sg.aws_security_group.sg",
+            "module.node-asg.aws_autoscaling_group.node",
+            "module.node-asg.aws_iam_instance_profile.asg",
+            "module.node-asg.aws_launch_configuration.node",
+            "module.node-asg.data.template_cloudinit_config.config",
+            "module.vpc.aws_subnet.project",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.node-asg",
+      "mode": "managed",
+      "type": "aws_iam_instance_profile",
+      "name": "asg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::613843495833:instance-profile/k8snode",
+            "create_date": "2020-09-22T15:27:18Z",
+            "id": "k8snode",
+            "name": "k8snode",
+            "name_prefix": null,
+            "path": "/",
+            "role": "K8S_DEV_k8snode",
+            "unique_id": "AIPAY527MNOMVSMCIQ5CZ"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.k8snode_role.aws_iam_role.role"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "module": "module.node-asg",
+      "mode": "managed",
+      "type": "aws_launch_configuration",
+      "name": "node",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:autoscaling:eu-central-1:613843495833:launchConfiguration:c96af7c1-26d0-46a3-bc81-979ec7e2930c:launchConfigurationName/k8snodes2020092215271965950000000a",
+            "associate_public_ip_address": true,
+            "ebs_block_device": [],
+            "ebs_optimized": false,
+            "enable_monitoring": true,
+            "ephemeral_block_device": [],
+            "iam_instance_profile": "k8snode",
+            "id": "k8snodes2020092215271965950000000a",
+            "image_id": "ami-052eaddc8881bf2ec",
+            "instance_type": "t3.medium",
+            "key_name": "k8s_key",
+            "name": "k8snodes2020092215271965950000000a",
+            "name_prefix": "k8snodes",
+            "placement_tenancy": null,
+            "root_block_device": [
+              {
+                "delete_on_termination": true,
+                "encrypted": true,
+                "iops": 0,
+                "volume_size": 30,
+                "volume_type": "gp2"
+              }
+            ],
+            "security_groups": [
+              "sg-0a41b1685116855a9"
+            ],
+            "spot_price": "0.0418",
+            "user_data": null,
+            "user_data_base64": "H4sIAAAAAAAA/7xU32sENRB+D9z/MJ7iiyTpnaJ45Q7U9kFoLUgVpPRhLpnbDc0mIZnUPSn+7bJ7P7q1j4U+zc7H/Phm5tv8EgNTYHm/T7SCrnp2CTPrzvVkL2Eba7CY9+v57a+31z/f/fHb1U+//zUXgyf/pFxcDCtYqIuZmAkpp0Ezcap95UqKxfEYi8xo2o4CX8LOeQrY0Xq+kJZ2WD2r0s5fM+8zhrKjLK+DidaFZgU/bB1PAkbaTD3rXpaWvC8mu8Qzces6esfwyy/01gW9xdIKt4OHB7iA9RoW8PgouKUgAEzNHmSEf7ULJZHhmEHeQMucykq/ghIbCqyww39iwL+LMrHT3oXaa49MhYdQRu+Hmm0XLXzTT4sKeNNiM3GUjw0s/4+InRMfW/JSmlo4dp+3Y+rJbDa6jR3puq2B62kr40TLzdcLgYllQww1WWQCuZ8gTUb7Bjpmg9zDAPHAPcXMcryPOByvnK+V0DxhQ0UZH6tVTYyNp/FSmFjbaAYrn2ivmtTACxw9QGtBCjJthLml7bkeJlZPdUs5EFNRLmp4dWVPwaGHDl2YwwswEUgETTy20SXWbKgo7worqyd1BkSUaiO8XYbYxQyVnQcXxkaeeLQy5djvx0/DXtgoAA5sG2J2oYGvxjSl1Pys6Zu78xyFY8aGjgvB5A7yncySyRMW0if7vFCLH9VyPO1B5djZ77/TY5+pxE9A93zkoGvJ2keDfkwWNgb6mI6/laV8oohLwHQW3uF/HwgcHgCQ0ngsxZl3M0k5E/8FAAD//3y3m69fBQAA",
+            "vpc_classic_link_id": "",
+            "vpc_classic_link_security_groups": null
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_key_pair.k8s",
+            "data.aws_ami.ubuntu",
+            "module.k8snode_role.aws_iam_role.role",
+            "module.k8snode_sg.aws_security_group.sg",
+            "module.node-asg.aws_iam_instance_profile.asg",
+            "module.node-asg.data.template_cloudinit_config.config",
+            "module.vpc.aws_vpc.project"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "module": "module.node-kf-asg",
+      "mode": "data",
+      "type": "template_cloudinit_config",
+      "name": "config",
+      "provider": "provider[\"registry.terraform.io/hashicorp/template\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "base64_encode": true,
+            "gzip": true,
+            "id": "153516062",
+            "part": [
+              {
+                "content": "#!/bin/bash\nif [[ 0 == 1 ]]\nthen\n  curl -o ~/inspector -L https://inspector-agent.amazonaws.com/linux/latest/install\n  chmod +x ~/inspector\n  ~/inspector \u003e~/inspector.log 2\u003e~/inspector.log\nfi\n\n",
+                "content_type": "text/x-shellscript",
+                "filename": "1-default.sh",
+                "merge_type": ""
+              },
+              {
+                "content": "#!/bin/bash\nexec\u003e\u003e/home/ubuntu/install.log\n2\u003e\u00261\napt-get update -y\napt-get upgrade -y\napt-get install -y apt-transport-https\ncurl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -\necho \"deb https://apt.kubernetes.io/ kubernetes-xenial main\" | tee -a /etc/apt/sources.list.d/kubernetes.list\nsudo apt-get update\nfor util in kubelet kube-proxy kubectl\ndo\n  echo \"getting $util ...\"\n  curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.19.2/bin/linux/amd64/$util\n  chmod +x $util\n  mv $util /usr/local/bin/\ndone\n",
+                "content_type": "text/x-shellscript",
+                "filename": "2-custom.sh",
+                "merge_type": ""
+              },
+              {
+                "content": "#!/bin/bash\nsnap install amazon-ssm-agent --classic\n",
+                "content_type": "text/x-shellscript",
+                "filename": "3-ssm.sh",
+                "merge_type": ""
+              }
+            ],
+            "rendered": "H4sIAAAAAAAA/7xU32sENRB+D9z/MJ7iiyTpnaJ45Q7U9kFoLUgVpPRhLpnbDc0mIZnUPSn+7bJ7P7q1j4U+zc7H/Phm5tv8EgNTYHm/T7SCrnp2CTPrzvVkL2Eba7CY9+v57a+31z/f/fHb1U+//zUXgyf/pFxcDCtYqIuZmAkpp0Ezcap95UqKxfEYi8xo2o4CX8LOeQrY0Xq+kJZ2WD2r0s5fM+8zhrKjLK+DidaFZgU/bB1PAkbaTD3rXpaWvC8mu8Qzces6esfwyy/01gW9xdIKt4OHB7iA9RoW8PgouKUgAEzNHmSEf7ULJZHhmEHeQMucykq/ghIbCqyww39iwL+LMrHT3oXaa49MhYdQRu+Hmm0XLXzTT4sKeNNiM3GUjw0s/4+InRMfW/JSmlo4dp+3Y+rJbDa6jR3puq2B62kr40TLzdcLgYllQww1WWQCuZ8gTUb7Bjpmg9zDAPHAPcXMcryPOByvnK+V0DxhQ0UZH6tVTYyNp/FSmFjbaAYrn2ivmtTACxw9QGtBCjJthLml7bkeJlZPdUs5EFNRLmp4dWVPwaGHDl2YwwswEUgETTy20SXWbKgo7worqyd1BkSUaiO8XYbYxQyVnQcXxkaeeLQy5djvx0/DXtgoAA5sG2J2oYGvxjSl1Pys6Zu78xyFY8aGjgvB5A7yncySyRMW0if7vFCLH9VyPO1B5djZ77/TY5+pxE9A93zkoGvJ2keDfkwWNgb6mI6/laV8oohLwHQW3uF/HwgcHgCQ0ngsxZl3M0k5E/8FAAD//3y3m69fBQAA"
+          }
+        }
+      ]
+    },
+    {
+      "module": "module.node-kf-asg",
+      "mode": "data",
+      "type": "template_file",
+      "name": "default_script",
+      "provider": "provider[\"registry.terraform.io/hashicorp/template\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "filename": null,
+            "id": "ea3d0defff3c29d582c2102502c639cde336210e7517d5f8d1b2014bdbb3c48d",
+            "rendered": "#!/bin/bash\nif [[ 0 == 1 ]]\nthen\n  curl -o ~/inspector -L https://inspector-agent.amazonaws.com/linux/latest/install\n  chmod +x ~/inspector\n  ~/inspector \u003e~/inspector.log 2\u003e~/inspector.log\nfi\n\n",
+            "template": "#!/bin/bash\nif [[ ${INSPECTOR} == 1 ]]\nthen\n  curl -o ~/inspector -L https://inspector-agent.amazonaws.com/linux/latest/install\n  chmod +x ~/inspector\n  ~/inspector \u003e~/inspector.log 2\u003e~/inspector.log\nfi\n\n",
+            "vars": {
+              "INSPECTOR": "0"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "module": "module.node-kf-asg",
+      "mode": "managed",
+      "type": "aws_autoscaling_group",
+      "name": "node",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:autoscaling:eu-central-1:613843495833:autoScalingGroup:139dd542-0dcf-4754-9f9c-ef461c135d26:autoScalingGroupName/kubeflow",
+            "availability_zones": [
+              "eu-central-1a",
+              "eu-central-1b",
+              "eu-central-1c"
+            ],
+            "default_cooldown": 300,
+            "desired_capacity": 1,
+            "enabled_metrics": null,
+            "force_delete": false,
+            "health_check_grace_period": 300,
+            "health_check_type": "EC2",
+            "id": "kubeflow",
+            "initial_lifecycle_hook": [],
+            "launch_configuration": "kubeflow20200922152719439500000009",
+            "launch_template": [],
+            "load_balancers": null,
+            "max_instance_lifetime": 0,
+            "max_size": 1,
+            "metrics_granularity": "1Minute",
+            "min_elb_capacity": null,
+            "min_size": 1,
+            "mixed_instances_policy": [],
+            "name": "kubeflow",
+            "name_prefix": null,
+            "placement_group": "",
+            "protect_from_scale_in": false,
+            "service_linked_role_arn": "arn:aws:iam::613843495833:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+            "suspended_processes": null,
+            "tag": [
+              {
+                "key": "InspectorScan",
+                "propagate_at_launch": true,
+                "value": "false"
+              },
+              {
+                "key": "Maintenance",
+                "propagate_at_launch": true,
+                "value": "k8s_dev"
+              },
+              {
+                "key": "Name",
+                "propagate_at_launch": true,
+                "value": "kubeflow-node"
+              },
+              {
+                "key": "Role",
+                "propagate_at_launch": true,
+                "value": "k8snode"
+              },
+              {
+                "key": "environment",
+                "propagate_at_launch": true,
+                "value": "k8s_thehard_way"
+              },
+              {
+                "key": "kubernetes.io/cluster/kubernetes-the-hard-way",
+                "propagate_at_launch": true,
+                "value": "owned"
+              },
+              {
+                "key": "project_name",
+                "propagate_at_launch": true,
+                "value": "k8s_the_hard_way"
+              },
+              {
+                "key": "role",
+                "propagate_at_launch": true,
+                "value": "k8s"
+              },
+              {
+                "key": "stage",
+                "propagate_at_launch": true,
+                "value": "DEV"
+              },
+              {
+                "key": "support-contact",
+                "propagate_at_launch": true,
+                "value": "none"
+              },
+              {
+                "key": "tagging-version",
+                "propagate_at_launch": true,
+                "value": "1.0"
+              }
+            ],
+            "tags": null,
+            "target_group_arns": null,
+            "termination_policies": null,
+            "timeouts": null,
+            "vpc_zone_identifier": [
+              "subnet-00596fbe9766ae699",
+              "subnet-0463ef2d393f0a745",
+              "subnet-099ae83adc25061f1"
+            ],
+            "wait_for_capacity_timeout": "10m",
+            "wait_for_elb_capacity": null
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiZGVsZXRlIjo2MDAwMDAwMDAwMDB9fQ==",
+          "dependencies": [
+            "aws_key_pair.k8s",
+            "data.aws_ami.ubuntu",
+            "module.k8snode_role.aws_iam_role.role",
+            "module.k8snode_sg.aws_security_group.sg",
+            "module.node-kf-asg.aws_iam_instance_profile.asg",
+            "module.node-kf-asg.aws_launch_configuration.node",
+            "module.node-kf-asg.data.template_cloudinit_config.config",
+            "module.vpc.aws_subnet.project",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.node-kf-asg",
+      "mode": "managed",
+      "type": "aws_autoscaling_policy",
+      "name": "asp-1",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "adjustment_type": "",
+            "arn": "arn:aws:autoscaling:eu-central-1:613843495833:scalingPolicy:5e6faadb-a09d-4f56-b096-a320eaab71e2:autoScalingGroupName/kubeflow:policyName/autoscaling-kubeflow",
+            "autoscaling_group_name": "kubeflow",
+            "cooldown": 0,
+            "estimated_instance_warmup": 0,
+            "id": "autoscaling-kubeflow",
+            "metric_aggregation_type": "",
+            "min_adjustment_magnitude": null,
+            "name": "autoscaling-kubeflow",
+            "policy_type": "TargetTrackingScaling",
+            "scaling_adjustment": 0,
+            "step_adjustment": [],
+            "target_tracking_configuration": [
+              {
+                "customized_metric_specification": [],
+                "disable_scale_in": true,
+                "predefined_metric_specification": [
+                  {
+                    "predefined_metric_type": "ASGAverageCPUUtilization",
+                    "resource_label": ""
+                  }
+                ],
+                "target_value": 70
+              }
+            ]
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_key_pair.k8s",
+            "data.aws_ami.ubuntu",
+            "module.k8snode_role.aws_iam_role.role",
+            "module.k8snode_sg.aws_security_group.sg",
+            "module.node-kf-asg.aws_autoscaling_group.node",
+            "module.node-kf-asg.aws_iam_instance_profile.asg",
+            "module.node-kf-asg.aws_launch_configuration.node",
+            "module.node-kf-asg.data.template_cloudinit_config.config",
+            "module.vpc.aws_subnet.project",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.node-kf-asg",
+      "mode": "managed",
+      "type": "aws_iam_instance_profile",
+      "name": "asg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::613843495833:instance-profile/k8snode-kf",
+            "create_date": "2020-09-22T15:27:18Z",
+            "id": "k8snode-kf",
+            "name": "k8snode-kf",
+            "name_prefix": null,
+            "path": "/",
+            "role": "K8S_DEV_k8snode",
+            "unique_id": "AIPAY527MNOM2ALXJI4BG"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.k8snode_role.aws_iam_role.role"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "module": "module.node-kf-asg",
+      "mode": "managed",
+      "type": "aws_launch_configuration",
+      "name": "node",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:autoscaling:eu-central-1:613843495833:launchConfiguration:2072360f-6a34-43a4-90ba-060cd8dc698d:launchConfigurationName/kubeflow20200922152719439500000009",
+            "associate_public_ip_address": true,
+            "ebs_block_device": [],
+            "ebs_optimized": false,
+            "enable_monitoring": true,
+            "ephemeral_block_device": [],
+            "iam_instance_profile": "k8snode-kf",
+            "id": "kubeflow20200922152719439500000009",
+            "image_id": "ami-052eaddc8881bf2ec",
+            "instance_type": "t3.xlarge",
+            "key_name": "k8s_key",
+            "name": "kubeflow20200922152719439500000009",
+            "name_prefix": "kubeflow",
+            "placement_tenancy": null,
+            "root_block_device": [
+              {
+                "delete_on_termination": true,
+                "encrypted": true,
+                "iops": 0,
+                "volume_size": 60,
+                "volume_type": "gp2"
+              }
+            ],
+            "security_groups": [
+              "sg-0a41b1685116855a9"
+            ],
+            "spot_price": "0.192",
+            "user_data": null,
+            "user_data_base64": "H4sIAAAAAAAA/7xU32sENRB+D9z/MJ7iiyTpnaJ45Q7U9kFoLUgVpPRhLpnbDc0mIZnUPSn+7bJ7P7q1j4U+zc7H/Phm5tv8EgNTYHm/T7SCrnp2CTPrzvVkL2Eba7CY9+v57a+31z/f/fHb1U+//zUXgyf/pFxcDCtYqIuZmAkpp0Ezcap95UqKxfEYi8xo2o4CX8LOeQrY0Xq+kJZ2WD2r0s5fM+8zhrKjLK+DidaFZgU/bB1PAkbaTD3rXpaWvC8mu8Qzces6esfwyy/01gW9xdIKt4OHB7iA9RoW8PgouKUgAEzNHmSEf7ULJZHhmEHeQMucykq/ghIbCqyww39iwL+LMrHT3oXaa49MhYdQRu+Hmm0XLXzTT4sKeNNiM3GUjw0s/4+InRMfW/JSmlo4dp+3Y+rJbDa6jR3puq2B62kr40TLzdcLgYllQww1WWQCuZ8gTUb7Bjpmg9zDAPHAPcXMcryPOByvnK+V0DxhQ0UZH6tVTYyNp/FSmFjbaAYrn2ivmtTACxw9QGtBCjJthLml7bkeJlZPdUs5EFNRLmp4dWVPwaGHDl2YwwswEUgETTy20SXWbKgo7worqyd1BkSUaiO8XYbYxQyVnQcXxkaeeLQy5djvx0/DXtgoAA5sG2J2oYGvxjSl1Pys6Zu78xyFY8aGjgvB5A7yncySyRMW0if7vFCLH9VyPO1B5djZ77/TY5+pxE9A93zkoGvJ2keDfkwWNgb6mI6/laV8oohLwHQW3uF/HwgcHgCQ0ngsxZl3M0k5E/8FAAD//3y3m69fBQAA",
+            "vpc_classic_link_id": "",
+            "vpc_classic_link_security_groups": null
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_key_pair.k8s",
+            "data.aws_ami.ubuntu",
+            "module.k8snode_role.aws_iam_role.role",
+            "module.k8snode_sg.aws_security_group.sg",
+            "module.node-kf-asg.aws_iam_instance_profile.asg",
+            "module.node-kf-asg.data.template_cloudinit_config.config",
+            "module.vpc.aws_vpc.project"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "module": "module.vpc",
+      "mode": "data",
+      "type": "aws_availability_zones",
+      "name": "available",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "all_availability_zones": null,
+            "exclude_names": null,
+            "exclude_zone_ids": null,
+            "filter": null,
+            "group_names": [
+              "eu-central-1"
+            ],
+            "id": "2020-09-22 15:27:06.75826819 +0000 UTC",
+            "names": [
+              "eu-central-1a",
+              "eu-central-1b",
+              "eu-central-1c"
+            ],
+            "state": null,
+            "zone_ids": [
+              "euc1-az2",
+              "euc1-az3",
+              "euc1-az1"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "module": "module.vpc",
+      "mode": "managed",
+      "type": "aws_default_security_group",
+      "name": "default",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:eu-central-1:613843495833:security-group/sg-0b708e53a73740bad",
+            "description": "default VPC security group",
+            "egress": [],
+            "id": "sg-0b708e53a73740bad",
+            "ingress": [],
+            "name": "default",
+            "owner_id": "613843495833",
+            "revoke_rules_on_delete": false,
+            "tags": null,
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "dependencies": [
+            "module.vpc.aws_vpc.project"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.vpc",
+      "mode": "managed",
+      "type": "aws_internet_gateway",
+      "name": "project",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:eu-central-1:613843495833:internet-gateway/igw-01c4327c77a8be98d",
+            "id": "igw-01c4327c77a8be98d",
+            "owner_id": "613843495833",
+            "tags": {
+              "Name": "IGW k8s_the_hard_way DEV",
+              "environment": "k8s_thehard_way",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.vpc.aws_vpc.project"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.vpc",
+      "mode": "managed",
+      "type": "aws_route",
+      "name": "projectp_default",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "destination_cidr_block": "0.0.0.0/0",
+            "destination_ipv6_cidr_block": "",
+            "destination_prefix_list_id": "",
+            "egress_only_gateway_id": "",
+            "gateway_id": "igw-01c4327c77a8be98d",
+            "id": "r-rtb-0564f87f91c0da6721080289494",
+            "instance_id": "",
+            "instance_owner_id": "",
+            "local_gateway_id": "",
+            "nat_gateway_id": "",
+            "network_interface_id": "",
+            "origin": "CreateRoute",
+            "route_table_id": "rtb-0564f87f91c0da672",
+            "state": "active",
+            "timeouts": null,
+            "transit_gateway_id": "",
+            "vpc_peering_connection_id": ""
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.vpc.aws_internet_gateway.project",
+            "module.vpc.aws_route_table.projectp",
+            "module.vpc.aws_vpc.project"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.vpc",
+      "mode": "managed",
+      "type": "aws_route_table",
+      "name": "project",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "id": "rtb-0321b8136dc34edb3",
+            "owner_id": "613843495833",
+            "propagating_vgws": [],
+            "route": [],
+            "tags": {
+              "Name": "RT private k8s_the_hard_way DEV",
+              "environment": "k8s_thehard_way",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.vpc.aws_vpc.project"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.vpc",
+      "mode": "managed",
+      "type": "aws_route_table",
+      "name": "projectp",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "id": "rtb-0564f87f91c0da672",
+            "owner_id": "613843495833",
+            "propagating_vgws": [],
+            "route": [],
+            "tags": {
+              "Name": "RT public k8s_the_hard_way DEV",
+              "environment": "k8s_thehard_way",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.vpc.aws_vpc.project"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.vpc",
+      "mode": "managed",
+      "type": "aws_route_table_association",
+      "name": "projectp",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": null,
+            "id": "rtbassoc-0dc4fbab4661381d7",
+            "route_table_id": "rtb-0564f87f91c0da672",
+            "subnet_id": "subnet-0beadd7459130d074"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.vpc.aws_route_table.projectp",
+            "module.vpc.aws_subnet.projectp",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": 1,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": null,
+            "id": "rtbassoc-079bda5779744636e",
+            "route_table_id": "rtb-0564f87f91c0da672",
+            "subnet_id": "subnet-0f017a47f316e9e8d"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.vpc.aws_route_table.projectp",
+            "module.vpc.aws_subnet.projectp",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": 2,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": null,
+            "id": "rtbassoc-0ae74dc6e29837060",
+            "route_table_id": "rtb-0564f87f91c0da672",
+            "subnet_id": "subnet-0c596d9cf150a756f"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.vpc.aws_route_table.projectp",
+            "module.vpc.aws_subnet.projectp",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.vpc",
+      "mode": "managed",
+      "type": "aws_route_table_association",
+      "name": "projectp2",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": null,
+            "id": "rtbassoc-0041b56f96e3e1d6e",
+            "route_table_id": "rtb-0564f87f91c0da672",
+            "subnet_id": "subnet-0463ef2d393f0a745"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.vpc.aws_route_table.projectp",
+            "module.vpc.aws_subnet.project",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": 1,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": null,
+            "id": "rtbassoc-0787d81c65591b8ee",
+            "route_table_id": "rtb-0564f87f91c0da672",
+            "subnet_id": "subnet-099ae83adc25061f1"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.vpc.aws_route_table.projectp",
+            "module.vpc.aws_subnet.project",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": 2,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": null,
+            "id": "rtbassoc-07ef0f750ab66a98a",
+            "route_table_id": "rtb-0564f87f91c0da672",
+            "subnet_id": "subnet-00596fbe9766ae699"
+          },
+          "private": "bnVsbA==",
+          "dependencies": [
+            "module.vpc.aws_route_table.projectp",
+            "module.vpc.aws_subnet.project",
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.vpc",
+      "mode": "managed",
+      "type": "aws_subnet",
+      "name": "project",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "0",
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:eu-central-1:613843495833:subnet/subnet-0463ef2d393f0a745",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "eu-central-1a",
+            "availability_zone_id": "euc1-az2",
+            "cidr_block": "10.200.1.0/24",
+            "id": "subnet-0463ef2d393f0a745",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "map_public_ip_on_launch": false,
+            "outpost_arn": "",
+            "owner_id": "613843495833",
+            "tags": {
+              "Name": "SN private k8s_the_hard_way DEV",
+              "environment": "k8s_thehard_way",
+              "kubernetes.io/cluster/kubernetes-the-hard-way": "owned",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": "1",
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:eu-central-1:613843495833:subnet/subnet-099ae83adc25061f1",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "eu-central-1b",
+            "availability_zone_id": "euc1-az3",
+            "cidr_block": "10.200.2.0/24",
+            "id": "subnet-099ae83adc25061f1",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "map_public_ip_on_launch": false,
+            "outpost_arn": "",
+            "owner_id": "613843495833",
+            "tags": {
+              "Name": "SN private k8s_the_hard_way DEV",
+              "environment": "k8s_thehard_way",
+              "kubernetes.io/cluster/kubernetes-the-hard-way": "owned",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": "2",
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:eu-central-1:613843495833:subnet/subnet-00596fbe9766ae699",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "eu-central-1c",
+            "availability_zone_id": "euc1-az1",
+            "cidr_block": "10.200.3.0/24",
+            "id": "subnet-00596fbe9766ae699",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "map_public_ip_on_launch": false,
+            "outpost_arn": "",
+            "owner_id": "613843495833",
+            "tags": {
+              "Name": "SN private k8s_the_hard_way DEV",
+              "environment": "k8s_thehard_way",
+              "kubernetes.io/cluster/kubernetes-the-hard-way": "owned",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.vpc",
+      "mode": "managed",
+      "type": "aws_subnet",
+      "name": "projectp",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "0",
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:eu-central-1:613843495833:subnet/subnet-0beadd7459130d074",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "eu-central-1a",
+            "availability_zone_id": "euc1-az2",
+            "cidr_block": "10.200.10.0/24",
+            "id": "subnet-0beadd7459130d074",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "map_public_ip_on_launch": false,
+            "outpost_arn": "",
+            "owner_id": "613843495833",
+            "tags": {
+              "Name": "SN public k8s_the_hard_way DEV",
+              "environment": "k8s_thehard_way",
+              "kubernetes.io/role/elb": "1",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": "1",
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:eu-central-1:613843495833:subnet/subnet-0f017a47f316e9e8d",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "eu-central-1b",
+            "availability_zone_id": "euc1-az3",
+            "cidr_block": "10.200.11.0/24",
+            "id": "subnet-0f017a47f316e9e8d",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "map_public_ip_on_launch": false,
+            "outpost_arn": "",
+            "owner_id": "613843495833",
+            "tags": {
+              "Name": "SN public k8s_the_hard_way DEV",
+              "environment": "k8s_thehard_way",
+              "kubernetes.io/role/elb": "1",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": "2",
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:eu-central-1:613843495833:subnet/subnet-0c596d9cf150a756f",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "eu-central-1c",
+            "availability_zone_id": "euc1-az1",
+            "cidr_block": "10.200.12.0/24",
+            "id": "subnet-0c596d9cf150a756f",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "map_public_ip_on_launch": false,
+            "outpost_arn": "",
+            "owner_id": "613843495833",
+            "tags": {
+              "Name": "SN public k8s_the_hard_way DEV",
+              "environment": "k8s_thehard_way",
+              "kubernetes.io/role/elb": "1",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "module.vpc.aws_vpc.project",
+            "module.vpc.data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.vpc",
+      "mode": "managed",
+      "type": "aws_vpc",
+      "name": "project",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:eu-central-1:613843495833:vpc/vpc-03d940693521c7a36",
+            "assign_generated_ipv6_cidr_block": false,
+            "cidr_block": "10.200.0.0/16",
+            "default_network_acl_id": "acl-08fa7e9d611b56d89",
+            "default_route_table_id": "rtb-0e9f52fd11d3b0422",
+            "default_security_group_id": "sg-0b708e53a73740bad",
+            "dhcp_options_id": "dopt-cac02ca0",
+            "enable_classiclink": null,
+            "enable_classiclink_dns_support": null,
+            "enable_dns_hostnames": true,
+            "enable_dns_support": true,
+            "id": "vpc-03d940693521c7a36",
+            "instance_tenancy": "default",
+            "ipv6_association_id": "",
+            "ipv6_cidr_block": "",
+            "main_route_table_id": "rtb-0e9f52fd11d3b0422",
+            "owner_id": "613843495833",
+            "tags": {
+              "Name": "VPC k8s_the_hard_way DEV",
+              "environment": "k8s_thehard_way",
+              "project_name": "k8s_the_hard_way",
+              "role": "k8s",
+              "stage": "DEV",
+              "support-contact": "none",
+              "tagging-version": "1.0"
+            }
+          },
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "module": "module.vpc",
+      "mode": "managed",
+      "type": "aws_vpc_ipv4_cidr_block_association",
+      "name": "secondary_cidr",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": "10.32.0.0/16",
+          "schema_version": 0,
+          "attributes": {
+            "cidr_block": "10.32.0.0/16",
+            "id": "vpc-cidr-assoc-0c49ebb4a4f729ce2",
+            "timeouts": null,
+            "vpc_id": "vpc-03d940693521c7a36"
+          },
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.vpc.aws_vpc.project"
+          ]
+        }
+      ]
+    }
+  ]
+}
+

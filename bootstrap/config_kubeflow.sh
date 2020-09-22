@@ -39,4 +39,4 @@ function getWorkerConfigs(){
     kubectl config use-context default --kubeconfig=worker-kubeflow-${index}.kubeconfig
   done
 }
-
+getWorkerConfigs

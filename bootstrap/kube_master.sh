@@ -32,7 +32,7 @@ ExecStart=/usr/local/bin/kube-apiserver \\
   --etcd-servers=${ETCD_SERVERS} \\
   --event-ttl=1h \\
   --encryption-provider-config=/var/lib/kubernetes/encryption-config.yaml \\
-  --feature-gates=EphemeralContainers=true \\
+  --feature-gates=EphemeralContainers=true, TokenRequest=true \\
   --kubelet-certificate-authority=/var/lib/kubernetes/ca.pem \\
   --kubelet-client-certificate=/var/lib/kubernetes/kubernetes.pem \\
   --kubelet-client-key=/var/lib/kubernetes/kubernetes-key.pem \\
@@ -68,7 +68,7 @@ ExecStart=/usr/local/bin/kube-controller-manager \\
   --cluster-signing-cert-file=/var/lib/kubernetes/ca.pem \\
   --cluster-signing-key-file=/var/lib/kubernetes/ca-key.pem \\
   --kubeconfig=/var/lib/kubernetes/kube-controller-manager.kubeconfig \\
-  --feature-gates=EphemeralContainers=true \\
+  --feature-gates=EphemeralContainers=true,TokenRequest=true \\
   --leader-elect=true \\
   --root-ca-file=/var/lib/kubernetes/ca.pem \\
   --service-account-private-key-file=/var/lib/kubernetes/service-account-key.pem \\
@@ -101,61 +101,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 [Service]
 ExecStart=/usr/local/bin/kube-scheduler \\
   --config=/etc/kubernetes/config/kube-scheduler.yaml \\
-  --feature-gates=EphemeralContainers=true \\
-  --v=2
-Restart=on-failure
-RestartSec=5
-
-[Install]
-WantedBy=multi-user.target
-EOF
-}
-function prepareKubelet(){
-  sudo mv ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
-  sudo mv ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
-  sudo mv ca.pem /var/lib/kubernetes/
-  cat <<EOF | sudo tee /var/lib/kubelet/kubelet-config.yaml
-kind: KubeletConfiguration
-apiVersion: kubelet.config.k8s.io/v1beta1
-authentication:
-  anonymous:
-    enabled: false
-  webhook:
-    enabled: true
-  x509:
-    clientCAFile: "/var/lib/kubernetes/ca.pem"
-authorization:
-  mode: Webhook
-cgroupDriver: systemd
-clusterDomain: "cluster.local"
-clusterDNS:
-  - "10.32.0.10"
-podCIDR: "${POD_CIDR}"
-resolvConf: "/run/systemd/resolve/resolv.conf"
-runtimeRequestTimeout: "15m"
-tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
-tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
-EOF
-cat <<EOF | sudo tee /etc/systemd/system/kubelet.service
-[Unit]
-Description=Kubernetes Kubelet
-Documentation=https://github.com/kubernetes/kubernetes
-After=containerd.service
-Requires=containerd.service
-
-[Service]
-ExecStart=/usr/local/bin/kubelet \\
-  --config=/var/lib/kubelet/kubelet-config.yaml \\
-  --container-runtime=remote \\
-  --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock \\
-  --cloud-provider=aws \\
-  --image-pull-progress-deadline=2m \\
-  --kubeconfig=/var/lib/kubelet/kubeconfig \\
-  --network-plugin=cni \\
-  --cni-conf-dir=/etc/cni/net.d \\
-  --cni-bin-dir=/opt/cni/bin \\
-  --node-ip=$(curl http://169.254.169.254/latest/meta-data/local-ipv4) \\
-  --register-node=true \\
+  --feature-gates=EphemeralContainers=true, TokenRequest=true \\
   --v=2
 Restart=on-failure
 RestartSec=5
@@ -240,7 +186,7 @@ ExecStart=/usr/local/bin/kubelet \\
   --container-runtime=remote \\
   --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock \\
   --cloud-provider=aws \\
-  --feature-gates=EphemeralContainers=true \\
+  --feature-gates=EphemeralContainers=true,TokenRequest=true \\
   --image-pull-progress-deadline=2m \\
   --kubeconfig=/var/lib/kubelet/kubeconfig \\
   --network-plugin=cni \\

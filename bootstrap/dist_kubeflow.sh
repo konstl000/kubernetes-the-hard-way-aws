@@ -25,8 +25,7 @@ function copyToInstance(){
     fi
   done
 }
-masters=$(getInstancesByTag k8smaster)
-workers=$(getInstancesByTag k8snode)
+kubeflow=$(getInstancesByTag kubeflow)
 for index in 1; do
   for filename in ca.pem worker-kubeflow-${index}-key.pem worker-kubeflow-${index}.pem worker-kubeflow-${index}.kubeconfig kube-proxy.kubeconfig
   do

@@ -87,7 +87,7 @@ function checkK8S(){
   fi
 }
 function uploadCerts(){
-  for fil in "$(ls bootstrap/*.pem)"
+  for fil in $(ls bootstrap/*.pem)
   do
     uploadCert "$fil"
   done

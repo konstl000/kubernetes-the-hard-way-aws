@@ -43,6 +43,5 @@ cfssl gencert \
   -config=ca-config.json \
   -hostname=$(getHostName "${kubeflow}" ${index}),$(getPrivateDnsName "${kubeflow}" ${index}),$(getPublicIp "${kubeflow}" ${index}),$(getPrivateIp "${kubeflow}" ${index}) \
   -profile=kubernetes \
-  worker-${index}-csr.json | cfssljson -bare worker-${index}
+  worker-kubeflow-${index}-csr.json | cfssljson -bare worker-kubeflow-${index}
 done
-
