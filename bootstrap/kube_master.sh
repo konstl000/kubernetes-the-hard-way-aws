@@ -32,7 +32,7 @@ ExecStart=/usr/local/bin/kube-apiserver \\
   --etcd-servers=${ETCD_SERVERS} \\
   --event-ttl=1h \\
   --encryption-provider-config=/var/lib/kubernetes/encryption-config.yaml \\
-  --feature-gates=EphemeralContainers=true, TokenRequest=true \\
+  --feature-gates=EphemeralContainers=true,TokenRequest=true \\
   --kubelet-certificate-authority=/var/lib/kubernetes/ca.pem \\
   --kubelet-client-certificate=/var/lib/kubernetes/kubernetes.pem \\
   --kubelet-client-key=/var/lib/kubernetes/kubernetes-key.pem \\
@@ -101,7 +101,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 [Service]
 ExecStart=/usr/local/bin/kube-scheduler \\
   --config=/etc/kubernetes/config/kube-scheduler.yaml \\
-  --feature-gates=EphemeralContainers=true, TokenRequest=true \\
+  --feature-gates=EphemeralContainers=true,TokenRequest=true \\
   --v=2
 Restart=on-failure
 RestartSec=5

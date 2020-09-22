@@ -73,6 +73,17 @@ function deployK8S(){
   putFileToVault "${KUBE_PATH}/admin_key" bootstrap/admin-key.pem
   echo -e "${GREEN}Env created successfully${DEF}"
 }
+function uploadCert(){
+  vaultPath=$(echo "$1" | sed -e 's`bootstrap`certificates`')
+  putFileToVault "${KUBE_PATH}/$vaultPath" "$1"
+}
+function getCerts(){
+ while read cert
+ do
+  echo -e "$(getFileFromVault "${KUBE_PATH}/certificates/$cert")">bootstrap/"$cert"
+ done<<<"$(vault kv list -format=json /concourse/${TEAM}/${KUBE_PATH}/certificates | jq -r '.[]')"
+}
+
 function checkK8S(){
   set +e
   KUBE_CONFIG=$(getFileFromVault "${KUBE_PATH}/kubeconfig")
@@ -96,6 +107,7 @@ function main(){
     echo -e "$(getFileFromVault "${KUBE_PATH}/ssh_private_key")">rsa/k8s.pem
     chmod 600 rsa/k8s.pem
     echo -e "$(getFileFromVault "${KUBE_PATH}/ssh_public_key")">rsa/k8s.pem.pub
+    getCerts
   fi
   local k8sCheck=$(checkK8S)
   if [[ "$k8sCheck" == 0 ]]
