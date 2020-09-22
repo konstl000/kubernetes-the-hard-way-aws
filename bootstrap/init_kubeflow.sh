@@ -17,6 +17,21 @@ function getHostName(){
 function getLbDNS(){
   aws elbv2 describe-load-balancers --names k8s-nlb | jq -r '.LoadBalancers[0].DNSName'
 }
+cat > ca-config.json <<EOF
+{
+  "signing": {
+    "default": {
+      "expiry": "8760h"
+    },
+    "profiles": {
+      "kubernetes": {
+        "usages": ["signing", "key encipherment", "server auth", "client auth"],
+        "expiry": "8760h"
+      }
+    }
+  }
+}
+EOF
 kubeflow=$(getInstancesByTag kubeflow)
 for index in 1; do
 cat > worker-kubeflow-${index}-csr.json <<EOF
