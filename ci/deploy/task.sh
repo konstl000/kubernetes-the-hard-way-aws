@@ -86,6 +86,22 @@ function checkK8S(){
     kubectl get no>/dev/null 2>/dev/null && echo 0 || echo 1    
   fi
 }
+function uploadCerts(){
+  for fil in "$(ls bootstrap/*.pem)"
+  do
+    uploadCert "$fil"
+  done
+}
+function uploadCert(){
+  vaultPath=$(echo "$1" | sed -e 's`bootstrap`certificates`')
+  putFileToVault "${KUBE_PATH}/$vaultPath" "$1"
+}
+function getCerts(){
+ while read cert
+ do
+  echo -e "$(getFileFromVault "${KUBE_PATH}/certificates/$cert")">bootstrap/"$cert"
+ done<<<"$(vault kv list -format=json /concourse/${TEAM}/${KUBE_PATH}/certificates | jq -r '.[]')"
+}
 function main(){
   TERRAFORM_STATE=$(getFileFromVault "${KUBE_PATH}/terraform_state")
   pushd ./repo
@@ -96,6 +112,7 @@ function main(){
     echo -e "$(getFileFromVault "${KUBE_PATH}/ssh_private_key")">rsa/k8s.pem
     chmod 600 rsa/k8s.pem
     echo -e "$(getFileFromVault "${KUBE_PATH}/ssh_public_key")">rsa/k8s.pem.pub
+    getCerts
   fi
   runTerraform
   putFileToVault "${KUBE_PATH}/terraform_state" terraform.tfstate
@@ -109,6 +126,7 @@ function main(){
   else
     echo -e "${YELLOW}Deploying kubernetes${DEF}"
     deployK8S
+    uploadCerts
   fi
   popd
 }

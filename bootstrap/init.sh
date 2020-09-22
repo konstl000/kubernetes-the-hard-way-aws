@@ -19,7 +19,6 @@ function getLbDNS(){
 }
 masters=$(getInstancesByTag k8smaster)
 workers=$(getInstancesByTag k8snode)
-
 cat > ca-config.json <<EOF
 {
   "signing": {
@@ -110,6 +109,7 @@ cfssl gencert \
   -hostname=$(getHostName "${workers}" ${index}),$(getPrivateDnsName "${workers}" ${index}),$(getPublicIp "${workers}" ${index}),$(getPrivateIp "${workers}" ${index}) \
   -profile=kubernetes \
   worker-${index}-csr.json | cfssljson -bare worker-${index}
+
 cat > master-${index}-csr.json <<EOF
 {
   "CN": "system:node:$(getPrivateDnsName "${masters}" ${index})",
@@ -136,7 +136,6 @@ cfssl gencert \
   -profile=kubernetes \
   master-${index}-csr.json | cfssljson -bare master-${index}
 done
-
 cat > kube-controller-manager-csr.json <<EOF
 {
   "CN": "system:kube-controller-manager",
