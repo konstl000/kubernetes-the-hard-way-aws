@@ -2,9 +2,9 @@ module "k8smaster_role" {
   source = "../shared/modules/iam_roles"
   default_tags = var.default_tags
   service = "ec2.amazonaws.com"
-  role_name = "${upper("${var.env_name}")}_${upper("${var.stage}")}_k8smaster"
+  role_name = "${upper(var.env_name)}_${upper(var.stage)}_k8smaster"
   named_policies = {
-    "${upper("${var.env_name}")}_${upper("${var.stage}")}_ssm_access_k8smaster" = <<EOF
+    "${upper(var.env_name)}_${upper(var.stage)}_ssm_access_k8smaster" = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -57,7 +57,7 @@ module "k8smaster_role" {
      ]
 }
 EOF
-"${upper("${var.env_name}")}_${upper("${var.stage}")}_cloud_provider_k8smaster" = <<EOF
+"${upper(var.env_name)}_${upper(var.stage)}_cloud_provider_k8smaster" = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -127,7 +127,7 @@ EOF
   ]
 }
 EOF
-"${upper("${var.env_name}")}_${upper("${var.stage}")}_ec2_access_k8smaster" = <<EOF
+"${upper(var.env_name)}_${upper(var.stage)}_ec2_access_k8smaster" = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -158,7 +158,7 @@ EOF
     ]
 }
 EOF
-"${upper("${var.env_name}")}_${upper("${var.stage}")}_cloud_provider_k8smaster_v2" = <<EOF
+"${upper(var.env_name)}_${upper(var.stage)}_cloud_provider_k8smaster_v2" = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -186,9 +186,9 @@ module "k8snode_role" {
   source = "../shared/modules/iam_roles"
   default_tags = var.default_tags
   service = "ec2.amazonaws.com"
-  role_name = "${upper("${var.env_name}")}_${upper("${var.stage}")}_k8snode"
+  role_name = "${upper(var.env_name)}_${upper(var.stage)}_k8snode"
   named_policies = {
-    "${upper("${var.env_name}")}_${upper("${var.stage}")}_ssm_access_k8snode" = <<EOF
+    "${upper(var.env_name)}_${upper(var.stage)}_ssm_access_k8snode" = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -241,7 +241,7 @@ module "k8snode_role" {
      ]
 }
 EOF
-"${upper("${var.env_name}")}_${upper("${var.stage}")}_ec2_access_k8snode" = <<EOF
+"${upper(var.env_name)}_${upper(var.stage)}_ec2_access_k8snode" = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -272,7 +272,7 @@ EOF
     ]
 }
 EOF
-"${upper("${var.env_name}")}_${upper("${var.stage}")}_cloud_provider_k8snode" = <<EOF
+"${upper(var.env_name)}_${upper(var.stage)}_cloud_provider_k8snode" = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [

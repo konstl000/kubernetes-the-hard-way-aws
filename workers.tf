@@ -26,7 +26,7 @@ module "node-asg" {
     {
       filename     = "2-custom.sh"
       content_type = "text/x-shellscript"
-      content      = "${data.template_file.k8snode.rendered}"
+      content      = data.template_file.k8snode.rendered
     },
     {
       filename     = "3-ssm.sh"

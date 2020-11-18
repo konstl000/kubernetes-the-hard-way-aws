@@ -26,7 +26,7 @@ module "master-asg" {
     {
       filename     = "2-custom.sh"
       content_type = "text/x-shellscript"
-      content      = "${data.template_file.k8smaster.rendered}"
+      content      = data.template_file.k8smaster.rendered
     },
     {
       filename     = "3-ssm.sh"
