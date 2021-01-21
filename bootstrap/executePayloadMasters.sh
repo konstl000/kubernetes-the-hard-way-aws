@@ -1,4 +1,7 @@
 #!/bin/bash
+function getNlbDNSByName(){
+  aws elbv2 describe-load-balancers --names $1 | jq -r '.LoadBalancers[0].DNSName'
+}
 function main(){
 for index in 1 2 3; do
   for filename in etcd.sh
@@ -22,6 +25,7 @@ source ./executePayload.sh
 USERNAME=ubuntu
 CONTROLLER_CONFIG=""
 ETCD_SERVERS=""
+NLB_DNS=$(getNlbDNSByName k8s-nlb)
 masters=$(getInstancesByTag k8smaster)
 for index in 1 2 3; do
   ETCD_SERVERS=$(echo "$ETCD_SERVERS,https://$(getPrivateIp "$masters" "$index"):2379")
@@ -30,3 +34,4 @@ for index in 1 2 3; do
   ETCD_SERVERS=$(echo "$ETCD_SERVERS" | sed 's/^,//')
 done
 main
+
