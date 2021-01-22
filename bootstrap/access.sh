@@ -5,7 +5,7 @@ function getNlbDNSByName(){
 }
 function configKubectl(){
   KUBERNETES_PUBLIC_ADDRESS=$(getNlbDNSByName k8s-nlb)
-  checkIfRunning "$KUBERNETES_PUBLIC_ADDRESS"
+  checkIfRunning "https://$KUBERNETES_PUBLIC_ADDRESS"
   kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=ca.pem \
     --embed-certs=true \
@@ -22,7 +22,7 @@ function checkIfRunning(){
   attNumber=1
   while true
   do
-  curl "$1"
+  curl -k "$1"
   if [[ "$?" == 0 ]]
   then
     break
