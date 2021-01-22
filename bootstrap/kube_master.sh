@@ -37,7 +37,7 @@ ExecStart=/usr/local/bin/kube-apiserver \\
   --kubelet-client-certificate=/var/lib/kubernetes/kubernetes.pem \\
   --kubelet-client-key=/var/lib/kubernetes/kubernetes-key.pem \\
   --runtime-config=api/all=true \\
-  --service-account-issuer= ${NLB_DNS} \\
+  --service-account-issuer=${NLB_DNS} \\
   --service-account-signing-key-file=/var/lib/kubernetes/service-account-key.pem \\
   --service-account-key-file=/var/lib/kubernetes/service-account.pem \\
   --service-cluster-ip-range=10.32.0.0/16 \\
