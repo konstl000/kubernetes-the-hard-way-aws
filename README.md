@@ -15,7 +15,7 @@ Assumes that you have a linux workstation or a mac with GNU sed
 ## Deployment
  - Set the kubernetes version you want to install in vars.tf
  - Generate an SSH key pair and store it as rsa/k8s.pem and rsa/k8s.pem.pub, respectively or use ./init.sh
- - Install kubectl 1.18 (https://storage.googleapis.com/kubernetes-release/release/v1.18.6/bin/linux/amd64/kubectl)
+ - Install kubectl 1.20 (https://storage.googleapis.com/kubernetes-release/release/v1.20.2/bin/linux/amd64/kubectl)
  - Install cfssl (https://github.com/cloudflare/cfssl/releases)
  - Install cfssljson (https://github.com/cloudflare/cfssl/releases)
  - Clone https://gitlab.fme.de/bu4/shared-terraform-modules.git as ../shared (with respect to the root folder of this repo)

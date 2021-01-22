@@ -20,5 +20,5 @@ variable env_name {
   default = "k8s"
 }
 variable K8S_VERSION {
-  default = "v1.19.2"
+  default = "v1.20.2"
 }
