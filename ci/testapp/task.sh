@@ -15,6 +15,6 @@ function main(){
   ./ingress.sh
   popd
 }
-fixDNS
+#fixDNS
 writeKubeconfig
 main

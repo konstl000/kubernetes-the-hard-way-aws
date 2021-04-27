@@ -132,5 +132,5 @@ function main(){
 }
 vaultLogin
 assumeRole ${ROLE_TO_ASSUME}
-fixDNS
+#fixDNS
 main
