@@ -1,6 +1,31 @@
 #!/bin/bash
 source repo/ci/common.sh
 set -e
+function runTerraform(){
+  local cnt=0
+  while [[ $cnt -lt ${MAX_ATTEMPTS} ]]
+  do
+    ./init.sh
+    local res=0
+    set +e
+    terraform init
+    res=$(($res+$?))
+    terraform plan -out plan
+    res=$(($res+$?))
+    terraform apply plan
+    res=$(($res+$?))
+    set -e
+    if [[ $res != 0 ]]
+    then
+      cnt=$(($cnt+1))
+      echo -e "${YELLOW}Terraform state may be locked, new attempt in ${INTERVAL} seconds, remaining attempts: $((${MAX_ATTEMPTS}-$cnt))${DEF}"
+      sleep ${INTERVAL}
+    else
+      echo -e "${GREEN}Terraform ran successfully"
+      break
+    fi
+  done
+}
 function main(){
   TERRAFORM_STATE=$(getFileFromVault "${KUBE_PATH}/terraform_state")
   pushd ./repo

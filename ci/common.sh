@@ -20,31 +20,6 @@ function assumeRole(){
 function fixDNS(){
   echo 'nameserver 8.8.8.8'>>/etc/resolv.conf
 }
-function runTerraform(){
-  local cnt=0
-  while [[ $cnt -lt ${MAX_ATTEMPTS} ]]
-  do
-    ./init.sh
-    local res=0
-    set +e
-    terraform init
-    res=$(($res+$?))
-    terraform plan -out plan
-    res=$(($res+$?))
-    terraform apply plan
-    res=$(($res+$?))
-    set -e
-    if [[ $res != 0 ]]
-    then
-      cnt=$(($cnt+1))
-      echo -e "${YELLOW}Terraform state may be locked, new attempt in ${INTERVAL} seconds, remaining attempts: $((${MAX_ATTEMPTS}-$cnt))${DEF}"
-      sleep ${INTERVAL}
-    else
-      echo -e "${GREEN}Terraform ran successfully"
-      break
-    fi
-  done
-}
 function vaultLogin(){
   vault login -no-print -method=ldap username=${VAULT_USER}  password="${VAULT_PASSWORD}"
 }
@@ -101,3 +76,7 @@ function getCerts(){
   echo -e "$(getFileFromVault "${KUBE_PATH}/certificates/$cert")">bootstrap/"$cert"
  done<<<"$(vault kv list -format=json /concourse/${TEAM}/${KUBE_PATH}/certificates | jq -r '.[]')"
 }
+function deleteFromVault(){
+  vault kv delete /concourse/${TEAM}/"$1"
+}
+
