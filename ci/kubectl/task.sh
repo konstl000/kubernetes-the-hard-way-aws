@@ -3,7 +3,7 @@ source repo/ci/common.sh
 function main(){
   TERRAFORM_STATE=$(getFileFromVault "${KUBE_PATH}/terraform_state")
   pushd ./repo
-  if [[ ! -z $TERRAFORM_STATE ]]
+  if [[ ! -z $TERRAFORM_STATE ]] && [[ "$TERRAFORM_STATE" != "null" ]]
   then
     echo "${TERRAFORM_STATE}">terraform.tfstate
     mkdir -p rsa
