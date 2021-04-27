@@ -92,7 +92,7 @@ ExecStart=/usr/local/bin/kubelet \\
   --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock \\
   --cloud-provider=aws \\
   --image-pull-progress-deadline=2m \\
-  --feature-gates=EphemeralContainers=true,TokenRequest=true \\
+  --feature-gates=EphemeralContainers=true \\
   --kubeconfig=/var/lib/kubelet/kubeconfig \\
   --network-plugin=cni \\
   --cni-conf-dir=/etc/cni/net.d \\

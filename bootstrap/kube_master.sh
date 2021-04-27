@@ -32,7 +32,7 @@ ExecStart=/usr/local/bin/kube-apiserver \\
   --etcd-servers=${ETCD_SERVERS} \\
   --event-ttl=1h \\
   --encryption-provider-config=/var/lib/kubernetes/encryption-config.yaml \\
-  --feature-gates=EphemeralContainers=true,TokenRequest=true \\
+  --feature-gates=EphemeralContainers=true \\
   --kubelet-certificate-authority=/var/lib/kubernetes/ca.pem \\
   --kubelet-client-certificate=/var/lib/kubernetes/kubernetes.pem \\
   --kubelet-client-key=/var/lib/kubernetes/kubernetes-key.pem \\
@@ -70,7 +70,7 @@ ExecStart=/usr/local/bin/kube-controller-manager \\
   --cluster-signing-cert-file=/var/lib/kubernetes/ca.pem \\
   --cluster-signing-key-file=/var/lib/kubernetes/ca-key.pem \\
   --kubeconfig=/var/lib/kubernetes/kube-controller-manager.kubeconfig \\
-  --feature-gates=EphemeralContainers=true,TokenRequest=true \\
+  --feature-gates=EphemeralContainers=true \\
   --leader-elect=true \\
   --root-ca-file=/var/lib/kubernetes/ca.pem \\
   --service-account-private-key-file=/var/lib/kubernetes/service-account-key.pem \\
@@ -103,7 +103,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 [Service]
 ExecStart=/usr/local/bin/kube-scheduler \\
   --config=/etc/kubernetes/config/kube-scheduler.yaml \\
-  --feature-gates=EphemeralContainers=true,TokenRequest=true \\
+  --feature-gates=EphemeralContainers=true \\
   --v=2
 Restart=on-failure
 RestartSec=5
@@ -188,7 +188,7 @@ ExecStart=/usr/local/bin/kubelet \\
   --container-runtime=remote \\
   --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock \\
   --cloud-provider=aws \\
-  --feature-gates=EphemeralContainers=true,TokenRequest=true \\
+  --feature-gates=EphemeralContainers=true \\
   --image-pull-progress-deadline=2m \\
   --kubeconfig=/var/lib/kubelet/kubeconfig \\
   --network-plugin=cni \\
