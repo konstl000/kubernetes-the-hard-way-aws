@@ -1,5 +1,5 @@
 #!/bin/bash
-curl -L -o nginx.yaml https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.0.3/deploy/static/provider/aws/deploy.yaml 
+curl -L -o nginx.yaml "${NGINX_URL}" 
 cnt=1
 while true
 do 

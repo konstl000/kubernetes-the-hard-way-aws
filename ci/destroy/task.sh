@@ -27,7 +27,7 @@ function main(){
   if [[ "$k8sCheck" == 0 ]]
   then
     pushd repo
-    curl -L -o nginx.yaml https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/aws/deploy.yaml
+    curl -L -o nginx.yaml "${NGINX_URL}" 
     kubectl delete -f nginx.yaml
     TERRAFORM_STATE=$(getFileFromVault "${KUBE_PATH}/terraform_state")
     if [[ -z "$TERRAFORM_STATE" ]] || [[ "$TERRAFORM_STATE" == "null" ]]
