@@ -227,6 +227,7 @@ ExecStart=/usr/local/bin/kube-proxy \\
   --config=/var/lib/kube-proxy/kube-proxy-config.yaml
 Restart=on-failure
 RestartSec=5
+LimitNOFILE=100000
 
 [Install]
 WantedBy=multi-user.target

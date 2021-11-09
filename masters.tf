@@ -10,7 +10,7 @@ module "master-asg" {
   }
   vpc_id = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnet_ids
-  node_type = "t3.medium"
+  node_type = var.MASTER_NODE_SIZE
   node_volume_size = 30
   make_public = true
   desired_capacity = 3

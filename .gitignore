@@ -8,3 +8,4 @@ bootstrap/*.json
 bootstrap/*.csr
 bootstrap/encryption-config.yaml
 bootstrap/protocol.txt
+kubecerts/

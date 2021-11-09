@@ -20,5 +20,12 @@ variable env_name {
   default = "k8s"
 }
 variable K8S_VERSION {
-  default = "v1.20.2"
+  default = "v1.22.2"
 }
+variable WORKER_NODE_SIZE{
+  default = "t3.medium"
+}
+variable MASTER_NODE_SIZE{
+  default = "t3.medium"
+}
+

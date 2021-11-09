@@ -35,9 +35,17 @@ function fixKubeconfig(){
 }
 function writeKubeconfig(){
   mkdir -p ~/.kube
+  if [[ -z "$1" ]] 
+  then
+    CERT_DIR="/root"
+  else
+    CERT_DIR="$1"
+    KUBE_CONFIG="$(echo "$KUBE_CONFIG" | sed 's`/root`'"$1"'`g')"
+  fi
+  
   echo -e "${KUBE_CONFIG}">~/.kube/config
-  echo -e "${ADMIN_CERT}">/root/admin.pem
-  echo -e "${ADMIN_KEY}">/root/admin-key.pem
+  echo -e "${ADMIN_CERT}">"$CERT_DIR"/admin.pem
+  echo -e "${ADMIN_KEY}">"$CERT_DIR"/admin-key.pem
 }
 function deployK8S(){
   ./bootstrap/deploy_all.sh
@@ -56,7 +64,7 @@ function checkK8S(){
   then
     echo 1
   else
-    writeKubeconfig
+    writeKubeconfig "$@"
     kubectl get no>/dev/null 2>/dev/null && echo 0 || echo 1    
   fi
 }
