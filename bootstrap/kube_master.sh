@@ -16,7 +16,6 @@ Documentation=https://github.com/kubernetes/kubernetes
 ExecStart=/usr/local/bin/kube-apiserver \\
   --advertise-address=$INTERNAL_IP \\
   --allow-privileged=true \\
-  --apiserver-count=3 \\
   --audit-log-maxage=30 \\
   --audit-log-maxbackup=3 \\
   --audit-log-maxsize=100 \\
@@ -88,7 +87,7 @@ EOF
 function initScheduler(){
 sudo mv kube-scheduler.kubeconfig /var/lib/kubernetes/
 cat <<EOF | sudo tee /etc/kubernetes/config/kube-scheduler.yaml
-apiVersion: kubescheduler.config.k8s.io/v1beta1
+apiVersion: kubescheduler.config.k8s.io/v1beta3
 kind: KubeSchedulerConfiguration
 clientConnection:
   kubeconfig: "/var/lib/kubernetes/kube-scheduler.kubeconfig"
@@ -185,15 +184,8 @@ Requires=containerd.service
 [Service]
 ExecStart=/usr/local/bin/kubelet \\
   --config=/var/lib/kubelet/kubelet-config.yaml \\
-  --container-runtime=remote \\
   --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock \\
-  --cloud-provider=aws \\
-  --feature-gates=EphemeralContainers=true \\
-  --image-pull-progress-deadline=2m \\
   --kubeconfig=/var/lib/kubelet/kubeconfig \\
-  --network-plugin=cni \\
-  --cni-conf-dir=/etc/cni/net.d \\
-  --cni-bin-dir=/opt/cni/bin \\
   --node-ip=$(curl http://169.254.169.254/latest/meta-data/local-ipv4) \\
   --register-node=true \\
   --register-with-taints=node-role.kubernetes.io/master=true:NoSchedule \\
